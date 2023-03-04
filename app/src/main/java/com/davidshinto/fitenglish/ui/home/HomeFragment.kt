@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.davidshinto.fitenglish.R
 import com.davidshinto.fitenglish.databinding.FragmentHomeBinding
 import com.davidshinto.fitenglish.startAnimation
@@ -31,14 +32,17 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
         val animation =
             AnimationUtils.loadAnimation(this.context, R.anim.circle_explosion_anim).apply {
-                duration = 1337
+                duration = 900
                 interpolator = AccelerateDecelerateInterpolator()
             }
         binding.fab.setOnClickListener{
             binding.fab.isVisible = false
             binding.circle.isVisible = true
             binding.circle.startAnimation(animation){
-                this.context?.let { it1 -> root.setBackgroundColor(it1.getColor(R.color.teal_200)) }
+                this.context?.let { it1 ->
+                    root.setBackgroundColor(it1.getColor(R.color.teal_200))
+                    it.findNavController().navigate(R.id.action_navigation_home_to_navigation_game_conf)
+                }
             }
         }
         return root

@@ -4,4 +4,6 @@
     <string name="title_finder">Finder</string>
     <string name="title_cards">Cards</string>
     <string name="title_history">History</string>
+    <string name="title_game_conf">Game Configuration</string>
+
 </resources>

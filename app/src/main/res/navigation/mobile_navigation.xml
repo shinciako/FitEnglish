@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="com.davidshinto.fitenglish.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_game_conf"
+            app:destination="@id/navigation_game_conf" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_finder"
@@ -28,4 +32,10 @@
         android:name="com.davidshinto.fitenglish.ui.history.HistoryFragment"
         android:label="@string/title_history"
         tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/navigation_game_conf"
+        android:name="com.davidshinto.fitenglish.ui.home.GameConfFragment"
+        android:label="@string/title_game_conf"
+        tools:layout="@layout/fragment_game_conf"/>
 </navigation>
