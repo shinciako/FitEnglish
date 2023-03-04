@@ -9,11 +9,6 @@ import android.view.ViewGroup
 import com.davidshinto.fitenglish.databinding.FragmentHistoryBinding
 
 class HistoryFragment : Fragment() {
-
-//    companion object {
-//        fun newInstance() = HistoryFragment()
-//    }
-
     private var _binding: FragmentHistoryBinding? = null
     private val binding get() = _binding!!
 
@@ -24,9 +19,10 @@ class HistoryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+        viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
 
-        return binding.root
+        return root
     }
 }
