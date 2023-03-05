@@ -26,16 +26,31 @@
         app:tint="@color/white" />
 
     <View
-        android:id="@+id/circle"
+        android:id="@+id/elipse"
         android:layout_width="128dp"
         android:layout_height="74dp"
-        android:background="@drawable/circle"
-        app:layout_constraintBottom_toBottomOf="@+id/fab"
-        app:layout_constraintEnd_toEndOf="@+id/fab"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/fab"
-        app:layout_constraintTop_toTopOf="@+id/fab"
-        app:layout_constraintVertical_bias="0.0" />
+        android:background="@drawable/elipse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <View
+        android:id="@+id/elipse2"
+        android:layout_width="128dp"
+        android:layout_height="74dp"
+        android:background="@drawable/elipse"
+        android:scaleX="12"
+        android:scaleY="12"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/elipse"
+        app:layout_constraintEnd_toEndOf="@id/elipse"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@id/elipse"
+        app:layout_constraintTop_toTopOf="@id/elipse"
+        app:layout_constraintVertical_bias="0.1" />
 
     <TextView
         android:id="@+id/textView"
