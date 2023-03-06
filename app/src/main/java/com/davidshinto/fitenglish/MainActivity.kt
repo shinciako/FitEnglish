@@ -60,4 +60,8 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return findNavController(R.id.nav_host_fragment_activity_main).navigateUp()
     }
+
+    fun setActionBarTitle(title: String?) {
+        supportActionBar?.title = title
+    }
 }

@@ -8,8 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SnapHelper
+import com.davidshinto.fitenglish.CenterSmoothScroller
 import com.davidshinto.fitenglish.CenterZoomLayoutManager
+import com.davidshinto.fitenglish.MainActivity
+import com.davidshinto.fitenglish.SnapHelperOneByOne
 import com.davidshinto.fitenglish.databinding.FragmentGameConfBinding
 import kotlin.properties.Delegates
 
@@ -33,12 +38,6 @@ class GameConfFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val middleOfTheList = gameModeRv.adapter!!.itemCount / 2
-        gameModeRv.scrollToPosition(middleOfTheList)
-    }
-
     private fun setupRv(){
         gameModeRv = binding.gameModeRv
         adapter = GameConfAdapter()
@@ -46,6 +45,15 @@ class GameConfFragment : Fragment() {
         var layoutManager =
             CenterZoomLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         gameModeRv.layoutManager = layoutManager
+        //scroll to mid elem
+        val middleOfTheList = gameModeRv.adapter!!.itemCount / 2
+        gameModeRv.scrollToPosition(middleOfTheList)
+        val smoothScroller = CenterSmoothScroller(context)
+        smoothScroller.targetPosition = middleOfTheList+1
+        layoutManager.startSmoothScroll(smoothScroller)
+        //centering item
+        val snapHelper = SnapHelperOneByOne()
+        snapHelper.attachToRecyclerView(gameModeRv)
 
         gameModeRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -55,6 +63,7 @@ class GameConfFragment : Fragment() {
             }
         })
     }
+
 
     private fun selectMiddleItem(layoutManager: CenterZoomLayoutManager) {
         val firstVisibleIndex = layoutManager.findFirstVisibleItemPosition()
@@ -72,8 +81,9 @@ class GameConfFragment : Fragment() {
             val halfWidth = vh.itemView.width * .5
             val rightSide = x + halfWidth
             val leftSide = x - halfWidth
-            val isInMiddle = width * .5 in leftSide..rightSide
+            val isInMiddle = width * .25 in leftSide..rightSide
             if (isInMiddle) {
+                (activity as MainActivity).setActionBarTitle(i.toString())
                 Log.i("CV", "Works $i")
             }
         }
