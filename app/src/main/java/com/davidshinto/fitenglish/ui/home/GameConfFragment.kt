@@ -1,22 +1,16 @@
 package com.davidshinto.fitenglish.ui.home
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
-import com.davidshinto.fitenglish.CenterSmoothScroller
 import com.davidshinto.fitenglish.CenterZoomLayoutManager
-import com.davidshinto.fitenglish.MainActivity
 import com.davidshinto.fitenglish.SnapHelperOneByOne
 import com.davidshinto.fitenglish.databinding.FragmentGameConfBinding
-import kotlin.properties.Delegates
 
 
 class GameConfFragment : Fragment() {
@@ -24,16 +18,21 @@ class GameConfFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var gameModeRv : RecyclerView
     private lateinit var adapter : GameConfAdapter
-    private var width by Delegates.notNull<Int>()
+    private lateinit var scrollListener: RecyclerView.OnScrollListener
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentGameConfBinding.inflate(inflater, container, false)
-        val displayMetrics = DisplayMetrics()
-        activity?.windowManager?.getDefaultDisplay()?.getMetrics(displayMetrics)
-        width = displayMetrics.widthPixels
+        scrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                recyclerView.post {
+                    selectMiddleItem(gameModeRv.layoutManager as CenterZoomLayoutManager)
+                }
+            }
+        }
         setupRv()
         return binding.root
     }
@@ -42,30 +41,22 @@ class GameConfFragment : Fragment() {
         gameModeRv = binding.gameModeRv
         adapter = GameConfAdapter()
         gameModeRv.adapter = adapter
-        var layoutManager =
+        val layoutManager =
             CenterZoomLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         gameModeRv.layoutManager = layoutManager
+
         //scroll to mid elem
-        val middleOfTheList = gameModeRv.adapter!!.itemCount / 2
-        gameModeRv.scrollToPosition(middleOfTheList)
-        val smoothScroller = CenterSmoothScroller(context)
-        smoothScroller.targetPosition = middleOfTheList+1
-        layoutManager.startSmoothScroll(smoothScroller)
-        //centering item
+//        val middleOfTheList = gameModeRv.adapter!!.itemCount / 2
+        gameModeRv.scrollToPosition(1)
         val snapHelper = SnapHelperOneByOne()
         snapHelper.attachToRecyclerView(gameModeRv)
-
-        gameModeRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                recyclerView.post {
-                    selectMiddleItem(layoutManager)
-                }
-            }
-        })
+        gameModeRv.addOnScrollListener(scrollListener as RecyclerView.OnScrollListener)
     }
 
 
     private fun selectMiddleItem(layoutManager: CenterZoomLayoutManager) {
+        if(_binding==null)
+            return
         val firstVisibleIndex = layoutManager.findFirstVisibleItemPosition()
         val lastVisibleIndex = layoutManager.findLastVisibleItemPosition()
         val visibleIndexes = listOf(firstVisibleIndex..lastVisibleIndex).flatten()
@@ -81,9 +72,10 @@ class GameConfFragment : Fragment() {
             val halfWidth = vh.itemView.width * .5
             val rightSide = x + halfWidth
             val leftSide = x - halfWidth
-            val isInMiddle = width * .25 in leftSide..rightSide
+            Log.i("CVS", "Works $halfWidth")
+            val isInMiddle = 1080 * .25 in leftSide..rightSide
             if (isInMiddle) {
-                (activity as MainActivity).setActionBarTitle(i.toString())
+                binding.tvMode.text = i.toString()
                 Log.i("CV", "Works $i")
             }
         }
@@ -92,5 +84,6 @@ class GameConfFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        gameModeRv.removeOnScrollListener(scrollListener)
     }
 }
