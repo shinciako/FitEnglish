@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -25,21 +26,30 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val animation =
-            AnimationUtils.loadAnimation(this.context, R.anim.elipse_explosion_anim).apply {
-                duration = 1000
-                interpolator = AccelerateDecelerateInterpolator()
-            }
+        setupPlayButton()
+        return root
+    }
+
+    private fun setupPlayButton(){
+        val explosionAnim = getExplosionAnim()
         binding.fab.setOnClickListener{
             binding.fab.isVisible = false
             binding.elipse.isVisible = true
-            binding.elipse.startAnimation(animation){
+            binding.elipse.startAnimation(explosionAnim){
                 this.context?.let { _ ->
                     it.findNavController().navigate(R.id.action_navigation_home_to_navigation_game_conf)
                 }
             }
         }
-        return root
+    }
+
+    private fun getExplosionAnim(): Animation {
+        val animation =
+            AnimationUtils.loadAnimation(this.context, R.anim.elipse_explosion_anim).apply {
+                duration = 1000
+                interpolator = AccelerateDecelerateInterpolator()
+            }
+        return animation
     }
 
     override fun onDestroyView() {
