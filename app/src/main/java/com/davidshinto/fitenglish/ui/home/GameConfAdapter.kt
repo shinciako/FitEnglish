@@ -3,13 +3,17 @@ package com.davidshinto.fitenglish.ui.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.davidshinto.fitenglish.R
 
 class GameConfAdapter : RecyclerView.Adapter<GameConfHolder>() {
 
-    private val numbers = listOf(1,2,3)
+    private val resources = listOf(
+        R.drawable.en1,
+        R.drawable.en2,
+        R.drawable.en3,
+    )
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameConfHolder {
@@ -19,7 +23,7 @@ class GameConfAdapter : RecyclerView.Adapter<GameConfHolder>() {
     }
 
     override fun onBindViewHolder(holder: GameConfHolder, position: Int) {
-        val item = numbers[position % numbers.size]
+        val item = resources[position % resources.size]
         holder.bind(item)
     }
 
@@ -28,8 +32,8 @@ class GameConfAdapter : RecyclerView.Adapter<GameConfHolder>() {
 }
 
 class GameConfHolder(private val view: View): RecyclerView.ViewHolder(view){
-    fun bind(selected: Int){
-        val tvInt = view.findViewById<TextView>(R.id.tvMode)
-        tvInt.text = selected.toString()
+    fun bind(mode: Int){
+        val ivMode = view.findViewById<ImageView>(R.id.ivMode)
+        ivMode.setImageResource(mode)
     }
 }
