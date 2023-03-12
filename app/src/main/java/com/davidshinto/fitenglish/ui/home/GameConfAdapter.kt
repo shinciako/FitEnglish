@@ -31,8 +31,8 @@ class GameConfAdapter : RecyclerView.Adapter<GameConfHolder>() {
     override fun getItemCount() = Int.MAX_VALUE
 }
 
-class GameConfHolder(private val view: View): RecyclerView.ViewHolder(view){
-    fun bind(mode: Int){
+class GameConfHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    fun bind(mode: Int) {
         val ivMode = view.findViewById<ImageView>(R.id.ivMode)
         ivMode.setImageResource(mode)
     }
