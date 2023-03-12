@@ -24,30 +24,6 @@ class CenterZoomLayoutManager : LinearLayoutManager {
         shrink()
     }
 
-    override fun smoothScrollToPosition(recyclerView: RecyclerView?, state: RecyclerView.State?, position: Int) {
-        val smoothScroller: RecyclerView.SmoothScroller = object : LinearSmoothScroller(recyclerView?.context) {
-            override fun getHorizontalSnapPreference(): Int {
-                return SNAP_TO_START
-            }
-
-            override fun calculateDtToFit(
-                viewStart: Int,
-                viewEnd: Int,
-                boxStart: Int,
-                boxEnd: Int,
-                snapPreference: Int
-            ): Int {
-                return boxStart + (boxEnd - boxStart) / 2 - (viewStart + (viewEnd - viewStart) / 2)
-            }
-
-            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                return 100f / displayMetrics.densityDpi
-            }
-        }
-        smoothScroller.targetPosition = position
-        startSmoothScroll(smoothScroller)
-    }
-
     override fun scrollHorizontallyBy(dx: Int, recycler: Recycler, state: RecyclerView.State): Int {
         val orientation = orientation
         return if (orientation == HORIZONTAL) {
@@ -59,7 +35,7 @@ class CenterZoomLayoutManager : LinearLayoutManager {
         }
     }
 
-    private fun shrink(){
+    private fun shrink() {
         val midpoint = width / 2f
         val d0 = 0f
         val d1 = shrinkDistance * midpoint
