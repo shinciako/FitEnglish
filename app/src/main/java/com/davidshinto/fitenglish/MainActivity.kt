@@ -1,12 +1,8 @@
 package com.davidshinto.fitenglish
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
-import android.util.TypedValue
-import android.view.WindowManager
 import android.view.WindowMetrics
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
@@ -19,7 +15,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.davidshinto.fitenglish.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
-import kotlin.math.roundToInt
 
 
 class MainActivity : AppCompatActivity(), WidthProvider {
