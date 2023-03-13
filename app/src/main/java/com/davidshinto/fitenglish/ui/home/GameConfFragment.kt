@@ -33,6 +33,7 @@ class GameConfFragment : Fragment() {
         getDeviceWidth()
         setupRv()
         setupSpinner()
+        setupSliders()
         return binding.root
     }
 
@@ -117,6 +118,15 @@ class GameConfFragment : Fragment() {
         val spinner = binding.spnCategory
         val arrayAdapter = CategorySpinnerAdapter(requireContext(), dummyCategory, spinner)
         spinner.adapter = arrayAdapter
+    }
+
+    private fun setupSliders(){
+        binding.sliderDistance.setLabelFormatter { value: Float ->
+            "$value km"
+        }
+        binding.sliderDistanceAfter.setLabelFormatter { value: Float ->
+            "${value.toInt()} m"
+        }
     }
 
     override fun onAttach(context: Context) {
