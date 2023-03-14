@@ -2,6 +2,7 @@ package com.davidshinto.fitenglish.ui.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,9 @@ class GameConfFragment : Fragment() {
         setupRv()
         setupSpinner()
         setupSliders()
+        binding.btnSubmit.setOnClickListener{
+            val mode = adapter.getCurrentGameMode()
+        }
         return binding.root
     }
 
@@ -93,6 +97,7 @@ class GameConfFragment : Fragment() {
             }
         }
         if (closestIndex != -1) {
+            adapter.currentItem = closestIndex
             binding.tvMode.text = closestIndex.toString()
         }
     }
