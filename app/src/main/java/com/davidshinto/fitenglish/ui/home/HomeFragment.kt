@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
     private fun getExplosionAnim(): Animation {
         val animation =
             AnimationUtils.loadAnimation(this.context, R.anim.elipse_explosion_anim).apply {
-                duration = 1000
+                duration = 700
                 interpolator = AccelerateDecelerateInterpolator()
             }
         return animation
