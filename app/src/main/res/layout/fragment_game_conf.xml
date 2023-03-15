@@ -40,7 +40,6 @@
         android:id="@+id/tvMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -101,10 +100,10 @@
                 android:id="@+id/sliderDistance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:stepSize="0.5"
-                android:value="2.5"
-                android:valueFrom="0.5"
-                android:valueTo="5.0"
+                android:stepSize="500"
+                android:value="2500"
+                android:valueFrom="500"
+                android:valueTo="5000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
         </LinearLayout>
@@ -128,10 +127,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:stepSize="50"
+                android:stepSize="100"
                 android:value="300"
                 android:valueFrom="100"
-                android:valueTo="1000"
+                android:valueTo="500"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
         </LinearLayout>
@@ -156,9 +155,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:stepSize="1"
-                android:value="10"
+                android:value="5"
                 android:valueFrom="4"
-                android:valueTo="20"
+                android:valueTo="10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
