@@ -6,9 +6,13 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 
-class CategorySpinnerAdapter(private val context: Context, private val items: Array<Category>, private val spinner: AdapterView<*>) :
+class CategorySpinnerAdapter(
+    private val context: Context,
+    private val items: Array<Category>,
+    spinner: AdapterView<*>,
+    private val clickListener: (Category) -> Unit
+) :
     ArrayAdapter<Category>(context, android.R.layout.simple_spinner_item, items),
     AdapterView.OnItemSelectedListener {
 
@@ -31,8 +35,8 @@ class CategorySpinnerAdapter(private val context: Context, private val items: Ar
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val selectedItem = items[position].name
-        Toast.makeText(context, "Selected Item: $selectedItem", Toast.LENGTH_SHORT).show()
+        val selectedItem = items[position]
+        clickListener(selectedItem)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
