@@ -2,17 +2,22 @@ package com.davidshinto.fitenglish.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import com.davidshinto.fitenglish.*
+import com.davidshinto.fitenglish.Category
+import com.davidshinto.fitenglish.CategorySpinnerAdapter
+import com.davidshinto.fitenglish.Game
+import com.davidshinto.fitenglish.WidthProvider
 import com.davidshinto.fitenglish.databinding.FragmentGameConfBinding
+import com.davidshinto.fitenglish.utils.CenterZoomLayoutManager
+import com.davidshinto.fitenglish.utils.SnapHelperOneByOne
 import kotlin.math.abs
 import kotlin.properties.Delegates
 
@@ -25,7 +30,13 @@ class GameConfFragment : Fragment() {
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private var width by Delegates.notNull<Int>()
     private var widthProvider: WidthProvider? = null
+    private lateinit var selectedCategory: Category
 
+    private val dummyCategory = arrayOf(
+        Category(0, "Food"),
+        Category(1, "Drink"),
+        Category(2, "IT terms")
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -33,11 +44,9 @@ class GameConfFragment : Fragment() {
         _binding = FragmentGameConfBinding.inflate(inflater, container, false)
         getDeviceWidth()
         setupRv()
-        setupSpinner()
+        setupSpinner(dummyCategory)
         setupSliders()
-        binding.btnSubmit.setOnClickListener{
-            val mode = adapter.getCurrentGameMode()
-        }
+        setupSubmitBtn()
         return binding.root
     }
 
@@ -98,7 +107,7 @@ class GameConfFragment : Fragment() {
         }
         if (closestIndex != -1) {
             adapter.currentItem = closestIndex
-            binding.tvMode.text = closestIndex.toString()
+            binding.tvMode.text = adapter.getCurrentGameMode().name
         }
     }
 
@@ -114,23 +123,39 @@ class GameConfFragment : Fragment() {
         })
     }
 
-    private fun setupSpinner() {
-        val dummyCategory = arrayOf(
-            Category(0, "Food"),
-            Category(1, "Drink"),
-            Category(2, "IT terms")
-        )
+    private fun setupSpinner(categories: Array<Category>) {
         val spinner = binding.spnCategory
-        val arrayAdapter = CategorySpinnerAdapter(requireContext(), dummyCategory, spinner)
+        val arrayAdapter =
+            CategorySpinnerAdapter(requireContext(), categories, spinner) { category: Category ->
+                categorySelected(category)
+            }
         spinner.adapter = arrayAdapter
     }
 
-    private fun setupSliders(){
+    private fun categorySelected(category: Category) {
+        selectedCategory = category
+    }
+
+    private fun setupSliders() {
         binding.sliderDistance.setLabelFormatter { value: Float ->
-            "$value km"
+            "${value / 1000} km"
         }
         binding.sliderDistanceAfter.setLabelFormatter { value: Float ->
             "${value.toInt()} m"
+        }
+    }
+
+    private fun setupSubmitBtn() {
+        binding.btnSubmit.setOnClickListener {
+            val mode = adapter.getCurrentGameMode()
+            val category = selectedCategory
+            val distance = binding.sliderDistance.value.toInt()
+            val distanceAfter = binding.sliderDistanceAfter.value.toInt()
+            val questions = binding.sliderQuestions.value.toInt()
+            val game = Game(0, mode, category, distance, distanceAfter, questions)
+            val action =
+                GameConfFragmentDirections.actionNavigationGameConfToFlashGameActivity(game)
+            it.findNavController().navigate(action)
         }
     }
 
