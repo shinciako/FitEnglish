@@ -1,4 +1,4 @@
-package com.davidshinto.fitenglish
+package com.davidshinto.fitenglish.utils
 
 import android.view.View
 import android.view.animation.Animation
