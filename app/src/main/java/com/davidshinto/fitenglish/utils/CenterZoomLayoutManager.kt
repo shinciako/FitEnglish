@@ -1,9 +1,7 @@
-package com.davidshinto.fitenglish
+package com.davidshinto.fitenglish.utils
 
 import android.content.Context
-import android.util.DisplayMetrics
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import kotlin.math.abs
