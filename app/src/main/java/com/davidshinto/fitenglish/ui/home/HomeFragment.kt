@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.davidshinto.fitenglish.R
 import com.davidshinto.fitenglish.databinding.FragmentHomeBinding
-import com.davidshinto.fitenglish.startAnimation
+import com.davidshinto.fitenglish.utils.startAnimation
 
 class HomeFragment : Fragment() {
 
