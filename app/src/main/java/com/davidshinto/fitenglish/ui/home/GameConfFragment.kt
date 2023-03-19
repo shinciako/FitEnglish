@@ -1,20 +1,17 @@
 package com.davidshinto.fitenglish.ui.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import com.davidshinto.fitenglish.Category
-import com.davidshinto.fitenglish.CategorySpinnerAdapter
-import com.davidshinto.fitenglish.Game
-import com.davidshinto.fitenglish.WidthProvider
+import com.davidshinto.fitenglish.*
 import com.davidshinto.fitenglish.databinding.FragmentGameConfBinding
 import com.davidshinto.fitenglish.utils.CenterZoomLayoutManager
 import com.davidshinto.fitenglish.utils.SnapHelperOneByOne
@@ -153,9 +150,9 @@ class GameConfFragment : Fragment() {
             val distanceAfter = binding.sliderDistanceAfter.value.toInt()
             val questions = binding.sliderQuestions.value.toInt()
             val game = Game(0, mode, category, distance, distanceAfter, questions)
-            val action =
-                GameConfFragmentDirections.actionNavigationGameConfToFlashGameActivity(game)
-            it.findNavController().navigate(action)
+            val intent = Intent(this.context, FlashGameActivity::class.java)
+            intent.putExtra("GAME", game)
+            startActivity(intent)
         }
     }
 
