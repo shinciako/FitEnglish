@@ -37,7 +37,11 @@
         android:id="@+id/navigation_game_conf"
         android:name="com.davidshinto.fitenglish.ui.home.GameConfFragment"
         android:label="@string/title_game_conf"
-        tools:layout="@layout/fragment_game_conf"/>
+        tools:layout="@layout/fragment_game_conf">
+        <action
+            android:id="@+id/action_navigation_game_conf_to_flashGameActivity"
+            app:destination="@id/flashGameActivity" />
+    </fragment>
     <activity
         android:id="@+id/flashGameActivity"
         android:name="com.davidshinto.fitenglish.FlashGameActivity"
