@@ -1,24 +1,29 @@
 package com.davidshinto.fitenglish
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
-import android.widget.Toast
+import android.os.Parcelable
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.davidshinto.fitenglish.databinding.ActivityFlashGameBinding
+import com.davidshinto.fitenglish.utils.parcelable
+import kotlinx.parcelize.Parcelize
+import java.util.*
+import kotlin.properties.Delegates
 
 
 class FlashGameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFlashGameBinding
     private var currentPosition = 0
-    private var numberOfQuestions = 0
+    private var numberOfQuestions by Delegates.notNull<Int>()
     private var points = 0
     private lateinit var inputGame: Game
+    private var randomNumber by Delegates.notNull<Int>()
+    private val navigationArgs: FlashGameActivityArgs by navArgs()
+    private var currentDistance = 0
+    private lateinit var gameConfHelper: GameHelper
 
 
     private val dummyFlashcards = arrayOf(
@@ -36,9 +41,10 @@ class FlashGameActivity : AppCompatActivity() {
     private val startGPSTrackerActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                val returnedGame = result.data?.getParcelableExtra<Game>("GAME")
-                inputGame = returnedGame ?: inputGame
-                Toast.makeText(this, "Game: ${inputGame.mode}", Toast.LENGTH_SHORT).show()
+                val returnedGameHelper = result.data?.parcelable<GameHelper>("GAME_HELPER")
+                binding.pbQuestions.progress = 0
+                currentPosition = 0
+                currentDistance += returnedGameHelper?.breakDistance ?: gameConfHelper.breakDistance
             }
         }
 
@@ -47,19 +53,15 @@ class FlashGameActivity : AppCompatActivity() {
         binding = ActivityFlashGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        inputGame = intent.getParcelableExtra("GAME")!!
+        inputGame = navigationArgs.game
         numberOfQuestions = inputGame.questionsPerTest
+        gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
+
 
         binding.tvCategoryName.text = inputGame.category.name
-        binding.tvFlash.text = dummyFlashcards[0].englishWord
-
         setupButtons()
     }
 
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        return super.onCreateView(name, context, attrs)
-        setupButtons()
-    }
 
     private fun setupButtons() {
         binding.btnNo.setOnClickListener {
@@ -73,15 +75,39 @@ class FlashGameActivity : AppCompatActivity() {
     }
 
     private fun goToNextQuestion() {
+        randomizeNumber()
         currentPosition++
         if (currentPosition < numberOfQuestions) {
-            binding.tvFlash.text = dummyFlashcards[currentPosition].englishWord
+            binding.tvFlash.text = dummyFlashcards[randomNumber].englishWord
             binding.pbQuestions.progress += ((1.0 / numberOfQuestions) * 100).toInt()
-        } else {
-            Toast.makeText(this, "You finished the test!", Toast.LENGTH_SHORT).show()
+        } else if (currentDistance < inputGame.distance) {
             val intent = Intent(this, GPSTracker::class.java)
-            intent.putExtra("gameOutput", inputGame)
+            intent.putExtra("GAME_HELPER", gameConfHelper)
             startGPSTrackerActivity.launch(intent)
+        } else {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
+
+    private fun randomizeNumber() {
+        randomNumber = Random().nextInt(dummyFlashcards.size - 1)
+    }
+
+    override fun onStart() {
+        setupRandomFlashcards()
+        super.onStart()
+    }
+
+    private fun setupRandomFlashcards() {
+        randomizeNumber()
+        binding.tvFlash.text = dummyFlashcards[randomNumber].englishWord
+    }
 }
+
+@Parcelize
+data class GameHelper(
+    var breakDistance: Int,
+    val totalDistance: Int,
+    var nowDistance: Int = 0
+) : Parcelable

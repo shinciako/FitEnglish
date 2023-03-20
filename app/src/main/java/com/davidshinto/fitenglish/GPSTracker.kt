@@ -1,6 +1,7 @@
 package com.davidshinto.fitenglish
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
@@ -14,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.davidshinto.fitenglish.utils.parcelable
 import com.google.android.gms.location.*
 
 class GPSTracker : AppCompatActivity(), SensorEventListener {
@@ -26,14 +28,16 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
     private var previousLocation: Location? = null
     private var lastAccelerometerData: FloatArray? = null
     private var lastAccelerometerTimestamp: Long = 0
-    private lateinit var game: Game
+    private lateinit var gameHelper: GameHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpstracker)
 
-        game = intent.getParcelableExtra("gameOutput")!!
-
+        gameHelper = intent.parcelable("GAME_HELPER")!!
+        if(gameHelper.nowDistance + gameHelper.breakDistance > gameHelper.totalDistance){
+            gameHelper.breakDistance = gameHelper.totalDistance - gameHelper.nowDistance
+        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -54,11 +58,11 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
                     }
                     previousLocation = location
                 }
-                if (distance >= game.distanceAfterTest) {
-                    val intent = Intent(this@GPSTracker, FlashGameActivity::class.java).apply {
-                        putExtra("GAME", game)
-                    }
-                    startActivity(intent)
+                if (distance >= gameHelper.breakDistance) {
+                    val intent = Intent()
+                    intent.putExtra("GAME_HELPER", gameHelper)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
                 }
             }
         }
