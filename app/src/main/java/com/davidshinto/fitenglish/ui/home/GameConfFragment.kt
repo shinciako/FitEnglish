@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
@@ -150,9 +151,9 @@ class GameConfFragment : Fragment() {
             val distanceAfter = binding.sliderDistanceAfter.value.toInt()
             val questions = binding.sliderQuestions.value.toInt()
             val game = Game(0, mode, category, distance, distanceAfter, questions)
-            val intent = Intent(this.context, FlashGameActivity::class.java)
-            intent.putExtra("GAME", game)
-            startActivity(intent)
+            val action =
+                GameConfFragmentDirections.actionNavigationGameConfToFlashGameActivity(game)
+            it.findNavController().navigate(action)
         }
     }
 
