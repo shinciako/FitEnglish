@@ -11,6 +11,7 @@ import android.hardware.SensorManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -35,7 +36,7 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
         setContentView(R.layout.activity_gpstracker)
 
         gameHelper = intent.parcelable("GAME_HELPER")!!
-        if(gameHelper.nowDistance + gameHelper.breakDistance > gameHelper.totalDistance){
+        if (gameHelper.nowDistance + gameHelper.breakDistance > gameHelper.totalDistance) {
             gameHelper.breakDistance = gameHelper.totalDistance - gameHelper.nowDistance
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -55,6 +56,9 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
                     if (previousLocation != null) {
                         distance += calculateDistance(location, previousLocation!!)
                         findViewById<TextView>(R.id.tvDistancePassed).text = distance.toString()
+                        val progressPercentage =
+                            (distance / gameHelper.breakDistance * 100).toInt()
+                        findViewById<ProgressBar>(R.id.progressBar).progress = progressPercentage
                     }
                     previousLocation = location
                 }
@@ -66,6 +70,15 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
                 }
             }
         }
+    }
+
+    private fun calculateDistance(location1: Location, location2: Location): Float {
+        val results = FloatArray(1)
+        Location.distanceBetween(
+            location1.latitude, location1.longitude,
+            location2.latitude, location2.longitude, results
+        )
+        return results[0]
     }
 
     override fun onResume() {
@@ -83,7 +96,6 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
                 arrayOf(ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION
             )
         }
-
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
     }
 
@@ -132,15 +144,6 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
             locationCallback,
             Looper.getMainLooper()
         )
-    }
-
-    private fun calculateDistance(location1: Location, location2: Location): Float {
-        val results = FloatArray(1)
-        Location.distanceBetween(
-            location1.latitude, location1.longitude,
-            location2.latitude, location2.longitude, results
-        )
-        return results[0]
     }
 
     companion object {
