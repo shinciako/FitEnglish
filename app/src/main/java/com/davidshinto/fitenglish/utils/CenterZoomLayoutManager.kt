@@ -7,15 +7,14 @@ import androidx.recyclerview.widget.RecyclerView.Recycler
 import kotlin.math.abs
 
 
-class CenterZoomLayoutManager : LinearLayoutManager {
-    private val shrinkAmount = 0.5f
-    private val shrinkDistance = 0.8f
-
-    constructor(context: Context?, orientation: Int, reverseLayout: Boolean) : super(
+class CenterZoomLayoutManager(context: Context?, orientation: Int, reverseLayout: Boolean) :
+    LinearLayoutManager(
         context,
         orientation,
         reverseLayout
-    )
+    ) {
+    private val shrinkAmount = 0.5f
+    private val shrinkDistance = 0.8f
 
     override fun scrollHorizontallyBy(dx: Int, recycler: Recycler, state: RecyclerView.State): Int {
         val orientation = orientation

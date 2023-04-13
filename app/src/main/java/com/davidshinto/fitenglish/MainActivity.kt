@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity(), WidthProvider {
             )
             displayMetrics.widthPixels = windowMetrics.bounds.width() - insets.left - insets.right
         } else { //earlier version of Android
+            @Suppress("DEPRECATION")
             windowManager.defaultDisplay.getMetrics(displayMetrics)
         }
         return displayMetrics.widthPixels

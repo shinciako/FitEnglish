@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 
 class CategorySpinnerAdapter(
-    private val context: Context,
+    context: Context,
     private val items: Array<Category>,
     spinner: AdapterView<*>,
     private val clickListener: (Category) -> Unit
@@ -42,8 +42,4 @@ class CategorySpinnerAdapter(
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
-    //Accidental override
-    override fun getContext(): Context {
-        return super.getContext()
-    }
 }
