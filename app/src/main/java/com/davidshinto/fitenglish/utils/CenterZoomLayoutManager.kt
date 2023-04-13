@@ -17,11 +17,6 @@ class CenterZoomLayoutManager : LinearLayoutManager {
         reverseLayout
     )
 
-    override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
-        super.onLayoutChildren(recycler, state)
-        shrink()
-    }
-
     override fun scrollHorizontallyBy(dx: Int, recycler: Recycler, state: RecyclerView.State): Int {
         val orientation = orientation
         return if (orientation == HORIZONTAL) {

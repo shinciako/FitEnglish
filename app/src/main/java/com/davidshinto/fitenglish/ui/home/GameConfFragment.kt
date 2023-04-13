@@ -1,18 +1,18 @@
 package com.davidshinto.fitenglish.ui.home
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import com.davidshinto.fitenglish.*
+import com.davidshinto.fitenglish.Category
+import com.davidshinto.fitenglish.CategorySpinnerAdapter
+import com.davidshinto.fitenglish.Game
+import com.davidshinto.fitenglish.WidthProvider
 import com.davidshinto.fitenglish.databinding.FragmentGameConfBinding
 import com.davidshinto.fitenglish.utils.CenterZoomLayoutManager
 import com.davidshinto.fitenglish.utils.SnapHelperOneByOne
@@ -29,6 +29,9 @@ class GameConfFragment : Fragment() {
     private var width by Delegates.notNull<Int>()
     private var widthProvider: WidthProvider? = null
     private lateinit var selectedCategory: Category
+
+    private lateinit var layoutManager: CenterZoomLayoutManager
+    private val snapHelper = SnapHelperOneByOne()
 
     private val dummyCategory = arrayOf(
         Category(0, "Food"),
@@ -48,6 +51,7 @@ class GameConfFragment : Fragment() {
         return binding.root
     }
 
+
     private fun getDeviceWidth() {
         width = widthProvider?.getWidth()!!
     }
@@ -55,10 +59,10 @@ class GameConfFragment : Fragment() {
     private fun setupRv() {
         rvGameMode = binding.rvGameMode
         setupAdapter()
-        val layoutManager = setupLayoutManagerToRecyclerViewAndReturnLayoutManager()
+        setupLayoutManager()
         setupSnapHelper()
         setupScrollListener()
-        centerItem(layoutManager)
+        setupInitialRvView()
     }
 
     private fun setupAdapter() {
@@ -66,17 +70,17 @@ class GameConfFragment : Fragment() {
         rvGameMode.adapter = adapter
     }
 
-    private fun setupLayoutManagerToRecyclerViewAndReturnLayoutManager(): LayoutManager {
-        val layoutManager =
+    private fun setupLayoutManager() {
+        layoutManager =
             CenterZoomLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        layoutManager.scrollToPosition(adapter.itemCount / 2)
         rvGameMode.layoutManager = layoutManager
-        return layoutManager
     }
 
     private fun setupSnapHelper() {
-        val snapHelper = SnapHelperOneByOne()
         snapHelper.attachToRecyclerView(rvGameMode)
     }
+
 
     private fun setupScrollListener() {
         scrollListener = object : RecyclerView.OnScrollListener() {
@@ -109,17 +113,31 @@ class GameConfFragment : Fragment() {
         }
     }
 
-    private fun centerItem(layoutManager: LayoutManager) {
-        rvGameMode.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                rvGameMode.viewTreeObserver.removeOnGlobalLayoutListener(this)
+    private fun setupInitialRvView() {
+        binding.rvGameMode.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+            override fun onLayoutChange(
+                v: View,
+                left: Int,
+                top: Int,
+                right: Int,
+                bottom: Int,
+                oldLeft: Int,
+                oldTop: Int,
+                oldRight: Int,
+                oldBottom: Int
+            ) {
+                binding.rvGameMode.removeOnLayoutChangeListener(this)
                 val padding = rvGameMode.width / 2 - layoutManager.getChildAt(0)!!.width / 2
                 rvGameMode.setPadding(padding, 0, padding, 0)
-                layoutManager.scrollToPosition(1)
+                val centerView = snapHelper.findSnapView(layoutManager) ?: return
+                val distance = snapHelper.calculateDistanceToFinalSnap(layoutManager, centerView)
+                if (distance != null) {
+                    binding.rvGameMode.scrollBy(distance[0], distance[1])
+                }
             }
         })
     }
+
 
     private fun setupSpinner(categories: Array<Category>) {
         val spinner = binding.spnCategory
