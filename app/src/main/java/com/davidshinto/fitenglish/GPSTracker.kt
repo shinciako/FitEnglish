@@ -34,7 +34,6 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpstracker)
-
         gameHelper = intent.parcelable("GAME_HELPER")!!
         if (gameHelper.nowDistance + gameHelper.breakDistance > gameHelper.totalDistance) {
             gameHelper.breakDistance = gameHelper.totalDistance - gameHelper.nowDistance
@@ -55,7 +54,8 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
                 for (location in locationResult.locations) {
                     if (previousLocation != null) {
                         distance += calculateDistance(location, previousLocation!!)
-                        findViewById<TextView>(R.id.tvDistancePassed).text = distance.toString()
+                        val formattedDistance = distance.toInt().toString()+" m"
+                        findViewById<TextView>(R.id.tvDistancePassed).text = formattedDistance
                         val progressPercentage =
                             (distance / gameHelper.breakDistance * 100).toInt()
                         findViewById<ProgressBar>(R.id.progressBar).progress = progressPercentage
@@ -148,5 +148,10 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
 
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
+    }
+
+    override fun onDestroy() {
+        findViewById<ProgressBar>(R.id.progressBar).progress = 0
+        super.onDestroy()
     }
 }
