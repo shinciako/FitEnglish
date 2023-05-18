@@ -1,4 +1,4 @@
-package com.davidshinto.fitenglish
+package com.davidshinto.fitenglish.ui.home.modes
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.Activity
@@ -16,6 +16,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.davidshinto.fitenglish.GameHelper
+import com.davidshinto.fitenglish.R
 import com.davidshinto.fitenglish.utils.parcelable
 import com.google.android.gms.location.*
 
@@ -54,7 +56,7 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
                 for (location in locationResult.locations) {
                     if (previousLocation != null) {
                         distance += calculateDistance(location, previousLocation!!)
-                        val formattedDistance = distance.toInt().toString()+" m"
+                        val formattedDistance = "Distance: " + distance.toInt().toString()+" m"
                         findViewById<TextView>(R.id.tvDistancePassed).text = formattedDistance
                         val progressPercentage =
                             (distance / gameHelper.breakDistance * 100).toInt()

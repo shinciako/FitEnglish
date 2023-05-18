@@ -1,19 +1,18 @@
 package com.davidshinto.fitenglish
 
-import android.content.Context
 import android.content.Intent
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.davidshinto.fitenglish.databinding.ActivityFlashGameBinding
+import com.davidshinto.fitenglish.db.Session
+import com.davidshinto.fitenglish.ui.home.modes.GPSTracker
+import com.davidshinto.fitenglish.utils.Card
 import com.davidshinto.fitenglish.utils.parcelable
 import kotlinx.parcelize.Parcelize
+import java.time.OffsetDateTime
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -28,9 +27,6 @@ class FlashGameActivity : AppCompatActivity() {
     private var randomNumber by Delegates.notNull<Int>()
     private val navigationArgs: FlashGameActivityArgs by navArgs()
     private var currentDistance = 0
-    private lateinit var sensorManager: SensorManager
-    private lateinit var accelerometerSensor: Sensor
-
     private lateinit var gameConfHelper: GameHelper
 
 
@@ -67,32 +63,7 @@ class FlashGameActivity : AppCompatActivity() {
 
 
         binding.tvCategoryName.text = inputGame.category.name
-        setupAccelometerSensor()
         setupButtons()
-    }
-
-    private val accelerometerListener = object : SensorEventListener {
-        override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
-
-        override fun onSensorChanged(event: SensorEvent) {
-            val x = event.values[0]
-
-            if (x > 2) {
-
-            } else if (x < -2) {
-
-            }
-        }
-    }
-
-    private fun setupAccelometerSensor() {
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        sensorManager.registerListener(
-            accelerometerListener,
-            accelerometerSensor,
-            SensorManager.SENSOR_DELAY_GAME
-        )
     }
 
     private fun setupButtons() {
@@ -117,6 +88,7 @@ class FlashGameActivity : AppCompatActivity() {
             intent.putExtra("GAME_HELPER", gameConfHelper)
             startGPSTrackerActivity.launch(intent)
         } else {
+            val session = Session(0,inputGame, OffsetDateTime.now())
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

@@ -5,5 +5,5 @@
     <string name="title_cards">Cards</string>
     <string name="title_history">History</string>
     <string name="title_game_conf">Game Configuration</string>
-
+    <string name="title_activity_matching_game">ActivityMatchingGame</string>
 </resources>

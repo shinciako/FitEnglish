@@ -9,13 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.davidshinto.fitenglish.Category
-import com.davidshinto.fitenglish.CategorySpinnerAdapter
-import com.davidshinto.fitenglish.Game
-import com.davidshinto.fitenglish.WidthProvider
+import com.davidshinto.fitenglish.*
 import com.davidshinto.fitenglish.databinding.FragmentGameConfBinding
-import com.davidshinto.fitenglish.utils.CenterZoomLayoutManager
-import com.davidshinto.fitenglish.utils.SnapHelperOneByOne
+import com.davidshinto.fitenglish.utils.*
 import kotlin.math.abs
 import kotlin.properties.Delegates
 
@@ -169,9 +165,25 @@ class GameConfFragment : Fragment() {
             val distanceAfter = binding.sliderDistanceAfter.value.toInt()
             val questions = binding.sliderQuestions.value.toInt()
             val game = Game(0, mode, category, distance, distanceAfter, questions)
-            val action =
-                GameConfFragmentDirections.actionNavigationGameConfToFlashGameActivity(game)
-            it.findNavController().navigate(action)
+            when (mode) {
+                Mode.Flash -> {
+                    val action =
+                        GameConfFragmentDirections.
+                        actionNavigationGameConfToFlashGameActivity(game)
+                    it.findNavController().navigate(action)
+                }
+                Mode.Match -> {
+                    val action =
+                        GameConfFragmentDirections.
+                        actionNavigationGameConfToMatchingGameActivity(game)
+                    it.findNavController().navigate(action)
+                }
+                Mode.Writer -> {
+                    val action = GameConfFragmentDirections.
+                    actionNavigationGameConfToWriterGameActivity(game)
+                    it.findNavController().navigate(action)
+                }
+            }
         }
     }
 
