@@ -1,4 +1,4 @@
-package com.davidshinto.fitenglish
+package com.davidshinto.fitenglish.utils
 
 interface WidthProvider {
     fun getWidth(): Int

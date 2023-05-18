@@ -1,4 +1,4 @@
-package com.davidshinto.fitenglish
+package com.davidshinto.fitenglish.utils
 
 data class Card(
     val id: Int,

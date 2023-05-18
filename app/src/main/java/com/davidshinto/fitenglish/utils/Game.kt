@@ -1,6 +1,7 @@
 package com.davidshinto.fitenglish
 
 import android.os.Parcelable
+import com.davidshinto.fitenglish.utils.Category
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 

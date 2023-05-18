@@ -1,4 +1,4 @@
-package com.davidshinto.fitenglish
+package com.davidshinto.fitenglish.utils
 
 import android.content.Context
 import android.view.View
@@ -6,9 +6,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.davidshinto.fitenglish.utils.Category
 
 class CategorySpinnerAdapter(
-    private val context: Context,
+    context: Context,
     private val items: Array<Category>,
     spinner: AdapterView<*>,
     private val clickListener: (Category) -> Unit
@@ -42,8 +43,4 @@ class CategorySpinnerAdapter(
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
-    //Accidental override
-    override fun getContext(): Context {
-        return super.getContext()
-    }
 }

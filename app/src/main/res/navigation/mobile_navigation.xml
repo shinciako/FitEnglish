@@ -9,7 +9,7 @@
         android:id="@+id/navigation_home"
         android:name="com.davidshinto.fitenglish.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_navigation_home_to_navigation_game_conf"
             app:destination="@id/navigation_game_conf" />
@@ -41,12 +41,36 @@
         <action
             android:id="@+id/action_navigation_game_conf_to_flashGameActivity"
             app:destination="@id/flashGameActivity" />
+        <action
+            android:id="@+id/action_navigation_game_conf_to_matchingGameActivity"
+            app:destination="@id/matchingGameActivity" />
+        <action
+            android:id="@+id/action_navigation_game_conf_to_writerGameActivity"
+            app:destination="@id/writerGameActivity" />
     </fragment>
     <activity
         android:id="@+id/flashGameActivity"
         android:name="com.davidshinto.fitenglish.FlashGameActivity"
         android:label="activity_flash_game"
-        tools:layout="@layout/activity_flash_game" >
+        tools:layout="@layout/activity_flash_game">
+        <argument
+            android:name="Game"
+            app:argType="com.davidshinto.fitenglish.Game" />
+    </activity>
+    <activity
+        android:id="@+id/matchingGameActivity"
+        android:name="com.davidshinto.fitenglish.ui.home.modes.MatchingGameActivity"
+        android:label="activity_matching_game"
+        tools:layout="@layout/activity_matching_game">
+        <argument
+            android:name="Game"
+            app:argType="com.davidshinto.fitenglish.Game" />
+    </activity>
+    <activity
+        android:id="@+id/writerGameActivity"
+        android:name="com.davidshinto.fitenglish.ui.home.modes.WriterGameActivity"
+        android:label="activity_writer_game"
+        tools:layout="@layout/activity_writer_game" >
         <argument
             android:name="Game"
             app:argType="com.davidshinto.fitenglish.Game" />

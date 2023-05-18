@@ -30,8 +30,7 @@ class GameConfAdapter : RecyclerView.Adapter<GameConfHolder>() {
         holder.bind(item)
     }
 
-    //Can issue memory leaks
-    override fun getItemCount() = Int.MAX_VALUE
+    override fun getItemCount() = resources.size*30
 
     fun getCurrentGameMode(): Mode{
         return resources[currentItem % resources.size].mode
