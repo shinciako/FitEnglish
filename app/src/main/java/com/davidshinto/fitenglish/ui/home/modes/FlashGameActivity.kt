@@ -10,6 +10,8 @@ import com.davidshinto.fitenglish.databinding.ActivityFlashGameBinding
 import com.davidshinto.fitenglish.db.Session
 import com.davidshinto.fitenglish.ui.home.modes.GPSTracker
 import com.davidshinto.fitenglish.utils.Card
+import com.davidshinto.fitenglish.utils.Word
+import com.davidshinto.fitenglish.utils.WordList
 import com.davidshinto.fitenglish.utils.parcelable
 import kotlinx.parcelize.Parcelize
 import java.time.OffsetDateTime
@@ -28,19 +30,6 @@ class FlashGameActivity : AppCompatActivity() {
     private val navigationArgs: FlashGameActivityArgs by navArgs()
     private var currentDistance = 0
     private lateinit var gameConfHelper: GameHelper
-
-
-    private val dummyFlashcards = arrayOf(
-        Card(0, "PL1", "ENG1"),
-        Card(1, "PL2", "ENG2"),
-        Card(2, "PL3", "ENG3"),
-        Card(3, "PL4", "ENG4"),
-        Card(4, "PL5", "ENG5"),
-        Card(5, "PL6", "ENG6"),
-        Card(6, "PL7", "ENG7"),
-        Card(7, "PL8", "ENG8"),
-        Card(8, "PL9", "ENG9"),
-    )
 
     private val startGPSTrackerActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -81,7 +70,7 @@ class FlashGameActivity : AppCompatActivity() {
         randomizeNumber()
         currentPosition++
         if (currentPosition < numberOfQuestions) {
-            binding.tvFlash.text = dummyFlashcards[randomNumber].englishWord
+            binding.tvFlash.text = WordList.wordList[randomNumber].engName
             binding.pbQuestions.progress += ((1.0 / numberOfQuestions) * 100).toInt()
         } else if (currentDistance < inputGame.distance) {
             val intent = Intent(this, GPSTracker::class.java)
@@ -95,7 +84,7 @@ class FlashGameActivity : AppCompatActivity() {
     }
 
     private fun randomizeNumber() {
-        randomNumber = Random().nextInt(dummyFlashcards.size - 1)
+        randomNumber = Random().nextInt(WordList.wordList.size - 1)
     }
 
     override fun onStart() {
@@ -105,7 +94,7 @@ class FlashGameActivity : AppCompatActivity() {
 
     private fun setupRandomFlashcards() {
         randomizeNumber()
-        binding.tvFlash.text = dummyFlashcards[randomNumber].englishWord
+        binding.tvFlash.text = WordList.wordList[randomNumber].engName
     }
 }
 

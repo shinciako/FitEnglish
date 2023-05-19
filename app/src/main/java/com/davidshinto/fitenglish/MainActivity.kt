@@ -4,7 +4,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.WindowMetrics
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.forEach
 import androidx.navigation.NavController
@@ -14,8 +16,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.davidshinto.fitenglish.databinding.ActivityMainBinding
 import com.davidshinto.fitenglish.utils.WidthProvider
+import com.davidshinto.fitenglish.utils.Word
+import com.davidshinto.fitenglish.utils.WordList
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
+import com.google.firebase.FirebaseApp
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 
 class MainActivity : AppCompatActivity(), WidthProvider {
@@ -28,6 +37,8 @@ class MainActivity : AppCompatActivity(), WidthProvider {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupNav()
+        FirebaseApp.initializeApp(this)
+        loadDataFromDB()
     }
 
     private fun setupNav() {
@@ -79,5 +90,28 @@ class MainActivity : AppCompatActivity(), WidthProvider {
             windowManager.defaultDisplay.getMetrics(displayMetrics)
         }
         return displayMetrics.widthPixels
+    }
+
+    private fun loadDataFromDB()
+    {
+        val database = FirebaseDatabase.getInstance("https://fitenglishdb-default-rtdb.europe-west1.firebasedatabase.app/")
+        val dbRef = database.getReference("wordList/")
+
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val dataList = mutableListOf<Word>()
+                for (snapshot in dataSnapshot.children) {
+                    val data = snapshot.getValue(Word::class.java)
+                    data?.let { dataList.add(it) }
+                }
+                dataList.sortBy { it.engName }
+                WordList.wordList = dataList
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(applicationContext,"An error happened while getting database data: $databaseError",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
