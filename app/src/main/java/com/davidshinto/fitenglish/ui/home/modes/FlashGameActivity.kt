@@ -1,17 +1,16 @@
-package com.davidshinto.fitenglish
+package com.davidshinto.fitenglish.ui.home.modes
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
+import com.davidshinto.fitenglish.Game
 import com.davidshinto.fitenglish.databinding.ActivityFlashGameBinding
 import com.davidshinto.fitenglish.db.Session
-import com.davidshinto.fitenglish.ui.home.modes.GPSTracker
 import com.davidshinto.fitenglish.utils.Card
+import com.davidshinto.fitenglish.utils.GameHelper
 import com.davidshinto.fitenglish.utils.parcelable
-import kotlinx.parcelize.Parcelize
 import java.time.OffsetDateTime
 import java.util.*
 import kotlin.properties.Delegates
@@ -88,9 +87,10 @@ class FlashGameActivity : AppCompatActivity() {
             intent.putExtra("GAME_HELPER", gameConfHelper)
             startGPSTrackerActivity.launch(intent)
         } else {
-            val session = Session(0,inputGame, OffsetDateTime.now())
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            val accuracy = points.toFloat() / numberOfQuestions.toFloat()
+            val session = Session(0, inputGame, accuracy, numberOfQuestions, OffsetDateTime.now())
+            val popupActivity = FinishScreenActivity(this, session)
+            popupActivity.show()
         }
     }
 
@@ -108,10 +108,3 @@ class FlashGameActivity : AppCompatActivity() {
         binding.tvFlash.text = dummyFlashcards[randomNumber].englishWord
     }
 }
-
-@Parcelize
-data class GameHelper(
-    var breakDistance: Int,
-    val totalDistance: Int,
-    var nowDistance: Int = 0
-) : Parcelable
