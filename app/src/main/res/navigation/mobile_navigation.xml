@@ -50,12 +50,12 @@
     </fragment>
     <activity
         android:id="@+id/flashGameActivity"
-        android:name="com.davidshinto.fitenglish.FlashGameActivity"
+        android:name="com.davidshinto.fitenglish.ui.home.modes.FlashGameActivity"
         android:label="activity_flash_game"
         tools:layout="@layout/activity_flash_game">
         <argument
             android:name="Game"
-            app:argType="com.davidshinto.fitenglish.Game" />
+            app:argType="com.davidshinto.fitenglish.utils.Game" />
     </activity>
     <activity
         android:id="@+id/matchingGameActivity"
@@ -64,7 +64,7 @@
         tools:layout="@layout/activity_matching_game">
         <argument
             android:name="Game"
-            app:argType="com.davidshinto.fitenglish.Game" />
+            app:argType="com.davidshinto.fitenglish.utils.Game" />
     </activity>
     <activity
         android:id="@+id/writerGameActivity"
@@ -73,6 +73,6 @@
         tools:layout="@layout/activity_writer_game" >
         <argument
             android:name="Game"
-            app:argType="com.davidshinto.fitenglish.Game" />
+            app:argType="com.davidshinto.fitenglish.utils.Game" />
     </activity>
 </navigation>

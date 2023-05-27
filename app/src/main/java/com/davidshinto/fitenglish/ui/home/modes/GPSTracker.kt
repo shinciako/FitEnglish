@@ -16,8 +16,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.davidshinto.fitenglish.GameHelper
 import com.davidshinto.fitenglish.R
+import com.davidshinto.fitenglish.utils.GameHelper
 import com.davidshinto.fitenglish.utils.parcelable
 import com.google.android.gms.location.*
 
