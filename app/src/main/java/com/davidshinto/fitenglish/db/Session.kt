@@ -17,7 +17,7 @@ data class Session(
     @ColumnInfo(name = "session_game")
     val game: Game,
     @ColumnInfo(name = "session_accuracy")
-    val accuracy: Float,
+    val accuracy: Double,
     @ColumnInfo(name = "session_numberOfQuestions")
     val numberOfQuestions: Int,
     @ColumnInfo(name = "session_date")
