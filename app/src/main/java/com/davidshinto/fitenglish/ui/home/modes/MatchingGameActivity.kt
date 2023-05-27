@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.davidshinto.fitenglish.R
 import com.davidshinto.fitenglish.utils.Flashcard
+import com.davidshinto.fitenglish.utils.Word
+import com.davidshinto.fitenglish.utils.WordList
+import com.google.firebase.database.FirebaseDatabase
 
 class MatchingGameActivity : AppCompatActivity() {
 
@@ -15,18 +18,11 @@ class MatchingGameActivity : AppCompatActivity() {
     private var selectedEnglishWord: String = ""
     private var selectedPolishWord: String = ""
 
-    private val flashcards = listOf(
-        Flashcard("kot", "cat"),
-        Flashcard("pies", "dog"),
-        Flashcard("kawa", "coffee")
-    )
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_matching_game)
-        val polishWords = flashcards.map { it.polishWord }.toMutableList()
-        val englishWords = flashcards.map { it.englishWord }.toMutableList()
+        val polishWords = WordList.wordList.map { it.polName }.toMutableList()
+        val englishWords = WordList.wordList.map { it.engName }.toMutableList()
 
         polishWords.shuffle()
         englishWords.shuffle()
@@ -51,7 +47,7 @@ class MatchingGameActivity : AppCompatActivity() {
 
     private fun checkAnswers() {
         if (selectedEnglishWord.isNotEmpty() && selectedPolishWord.isNotEmpty()) {
-            val selectedEnglishWordTranslation = flashcards.find { it.englishWord == selectedEnglishWord }?.polishWord
+            val selectedEnglishWordTranslation = WordList.wordList.find { it.engName == selectedEnglishWord }?.polName
             if (selectedPolishWord == selectedEnglishWordTranslation) {
                 Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show()
                 englishWordsAdapter.removeWord(selectedEnglishWord)

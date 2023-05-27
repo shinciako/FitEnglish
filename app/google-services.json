@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "227393596749",
+    "firebase_url": "https://fitenglishdb-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "fitenglishdb",
+    "storage_bucket": "fitenglishdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227393596749:android:6eaf4e760f469faae79b04",
+        "android_client_info": {
+          "package_name": "com.davidshinto.fitenglish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "227393596749-sq9g53udenb3130sp87jqj62bvfaiv22.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK8RMvubqMhFglEHmEFlnM4B6XuhQ2BGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "227393596749-sq9g53udenb3130sp87jqj62bvfaiv22.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227393596749:android:a3ccb1f5782896eee79b04",
+        "android_client_info": {
+          "package_name": "com.dolpheenstudio.fitenglishdb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "227393596749-sq9g53udenb3130sp87jqj62bvfaiv22.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK8RMvubqMhFglEHmEFlnM4B6XuhQ2BGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "227393596749-sq9g53udenb3130sp87jqj62bvfaiv22.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
