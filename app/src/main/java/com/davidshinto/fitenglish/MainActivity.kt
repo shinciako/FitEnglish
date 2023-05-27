@@ -6,7 +6,6 @@ import android.util.DisplayMetrics
 import android.view.WindowMetrics
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.forEach
 import androidx.navigation.NavController
