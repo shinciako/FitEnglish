@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.davidshinto.fitenglish.R
 import com.davidshinto.fitenglish.db.Session
 import com.davidshinto.fitenglish.utils.*
-import com.google.firebase.database.FirebaseDatabase
 import java.time.OffsetDateTime
+import kotlin.math.roundToInt
 
 class MatchingGameActivity : AppCompatActivity() {
 
@@ -77,11 +77,13 @@ class MatchingGameActivity : AppCompatActivity() {
         if (selectedEnglishWord.isNotEmpty() && selectedPolishWord.isNotEmpty()) {
             val selectedEnglishWordTranslation = WordList.wordList.find { it.engName == selectedEnglishWord }?.polName
             if (selectedPolishWord == selectedEnglishWordTranslation) {
+                numberOfQuestions++
                 Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show()
                 englishWordsAdapter.removeWord(selectedEnglishWord)
                 polishWordsAdapter.removeWord(selectedPolishWord)
             } else {
                 Toast.makeText(this, "Incorrect", Toast.LENGTH_SHORT).show()
+                negativePoints++
             }
             selectedEnglishWord = ""
             selectedPolishWord = ""
@@ -104,7 +106,8 @@ class MatchingGameActivity : AppCompatActivity() {
     }
 
     private fun finishGame(){
-        val accuracy = ((numberOfQuestions - negativePoints).toFloat() / numberOfQuestions.toFloat())*100
+        val accuracy = ((numberOfQuestions - negativePoints).toFloat() / numberOfQuestions.toFloat())*100.0
+        accuracy.roundToInt()
         val session = Session(0, inputGame, accuracy, numberOfQuestions, OffsetDateTime.now())
         val popupActivity = FinishScreenActivity(this, session)
         popupActivity.show()
