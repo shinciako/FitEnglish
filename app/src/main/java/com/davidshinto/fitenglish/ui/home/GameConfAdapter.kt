@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.davidshinto.fitenglish.Mode
+import com.davidshinto.fitenglish.utils.Mode
 import com.davidshinto.fitenglish.R
 
 class GameConfAdapter : RecyclerView.Adapter<GameConfHolder>() {
@@ -32,7 +32,7 @@ class GameConfAdapter : RecyclerView.Adapter<GameConfHolder>() {
 
     override fun getItemCount() = resources.size*30
 
-    fun getCurrentGameMode(): Mode{
+    fun getCurrentGameMode(): Mode {
         return resources[currentItem % resources.size].mode
     }
 }

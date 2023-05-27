@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.navigation.navArgs
-import com.davidshinto.fitenglish.Game
+import com.davidshinto.fitenglish.utils.Game
 import com.davidshinto.fitenglish.databinding.ActivityWriterGameBinding
 import com.davidshinto.fitenglish.utils.Card
 import java.util.*

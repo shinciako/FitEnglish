@@ -5,10 +5,10 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
-import com.davidshinto.fitenglish.Game
 import com.davidshinto.fitenglish.databinding.ActivityFlashGameBinding
 import com.davidshinto.fitenglish.db.Session
 import com.davidshinto.fitenglish.utils.Card
+import com.davidshinto.fitenglish.utils.Game
 import com.davidshinto.fitenglish.utils.GameHelper
 import com.davidshinto.fitenglish.utils.parcelable
 import java.time.OffsetDateTime
@@ -20,8 +20,8 @@ class FlashGameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFlashGameBinding
     private var currentPosition = 0
-    private var numberOfQuestions by Delegates.notNull<Int>()
     private var points = 0
+    private var numberOfQuestions = 0
     private lateinit var inputGame: Game
     private var randomNumber by Delegates.notNull<Int>()
     private val navigationArgs: FlashGameActivityArgs by navArgs()
@@ -57,7 +57,6 @@ class FlashGameActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         inputGame = navigationArgs.game
-        numberOfQuestions = inputGame.questionsPerTest
         gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
 
 
@@ -69,7 +68,6 @@ class FlashGameActivity : AppCompatActivity() {
         binding.btnNo.setOnClickListener {
             goToNextQuestion()
         }
-
         binding.btnYes.setOnClickListener {
             points++
             goToNextQuestion()
@@ -79,23 +77,37 @@ class FlashGameActivity : AppCompatActivity() {
     private fun goToNextQuestion() {
         randomizeNumber()
         currentPosition++
-        if (currentPosition < numberOfQuestions) {
-            binding.tvFlash.text = dummyFlashcards[randomNumber].englishWord
-            binding.pbQuestions.progress += ((1.0 / numberOfQuestions) * 100).toInt()
+        numberOfQuestions++
+        if (currentPosition < inputGame.questionsPerTest) {
+            getQuestionAndUpdateProgressBar()
         } else if (currentDistance < inputGame.distance) {
-            val intent = Intent(this, GPSTracker::class.java)
-            intent.putExtra("GAME_HELPER", gameConfHelper)
-            startGPSTrackerActivity.launch(intent)
+            trackDistance()
         } else {
-            val accuracy = points.toFloat() / numberOfQuestions.toFloat()
-            val session = Session(0, inputGame, accuracy, numberOfQuestions, OffsetDateTime.now())
-            val popupActivity = FinishScreenActivity(this, session)
-            popupActivity.show()
+            finishGame()
         }
     }
 
     private fun randomizeNumber() {
         randomNumber = Random().nextInt(dummyFlashcards.size - 1)
+    }
+
+    private fun getQuestionAndUpdateProgressBar(){
+        binding.tvFlash.text = dummyFlashcards[randomNumber].englishWord
+        binding.pbQuestions.progress += ((1.0 / inputGame.questionsPerTest) * 100).toInt()
+    }
+
+    private fun trackDistance(){
+        val intent = Intent(this, GPSTracker::class.java)
+        intent.putExtra("GAME_HELPER", gameConfHelper)
+        startGPSTrackerActivity.launch(intent)
+    }
+
+    private fun finishGame(){
+        binding.pbQuestions.progress = 100
+        val accuracy = (points.toFloat() / numberOfQuestions.toFloat())*100
+        val session = Session(0, inputGame, accuracy, numberOfQuestions, OffsetDateTime.now())
+        val popupActivity = FinishScreenActivity(this, session)
+        popupActivity.show()
     }
 
     override fun onStart() {

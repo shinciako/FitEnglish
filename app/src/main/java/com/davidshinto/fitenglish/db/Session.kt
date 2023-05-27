@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.davidshinto.fitenglish.Game
+import com.davidshinto.fitenglish.utils.Game
 import kotlinx.parcelize.Parcelize
 import java.time.OffsetDateTime
 
