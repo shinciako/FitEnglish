@@ -1,93 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:background="#00FF0000"
-    android:gravity="center"
-    android:orientation="vertical">
+    app:cardBackgroundColor="#D8CD69"
+    app:cardCornerRadius="30dp"
+    tools:context=".ui.home.modes.FinishScreenActivity">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="300dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#D8CD69">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvSessionCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:background="#BC3333"
+            android:padding="10dp"
+            android:text="Session completed!"
+            android:textColor="#F3E6E6"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvFinishScreenCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginVertical="10dp"
+            android:text="Category"
+            android:textSize="16sp" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp">
+        <TextView
+            android:id="@+id/tvFinishScreenMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginVertical="10dp"
+            android:text="Mode"
+            android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/tcSessionCompleted"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#BC3333"
-                    android:padding="10dp"
-                    android:text="Session completed!"
-                    android:textColor="#F3E6E6"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tvFinishScreenAccuracy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginVertical="10dp"
+            android:layout_weight="0"
+            android:text="Accuracy"
+            android:textSize="16sp" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvFinishScreenDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginVertical="10dp"
+            android:text="Distance"
+            android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tvFinishScreenCategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="50dp"
-                android:layout_marginVertical="10dp"
-                android:text="Category"
-                android:textSize="16sp" />
+        <TextView
+            android:id="@+id/tvFinishScreenNumberQuestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="0"
+            android:text="Number of questions"
+            android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tvFinishScreenMode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="50dp"
-                android:layout_marginVertical="10dp"
-                android:text="Mode"
-                android:textSize="16sp" />
+        <Button
+            android:id="@+id/btnSaveSession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-9dp"
+            android:text="Save session!"
+            app:iconPadding="0dp" />
 
-            <TextView
-                android:id="@+id/tvFinishScreenAccuracy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="50dp"
-                android:layout_marginVertical="10dp"
-                android:layout_weight="0"
-                android:text="Accuracy"
-                android:textSize="16sp" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvFinishScreenDistance"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="50dp"
-                android:layout_marginVertical="10dp"
-                android:text="Distance"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tvFinishScreenNumberQuestions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="50dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="0"
-                android:text="Number of questions"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>
