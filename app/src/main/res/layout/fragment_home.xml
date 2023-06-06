@@ -42,6 +42,7 @@
         android:layout_width="128dp"
         android:layout_height="74dp"
         android:background="@drawable/elipse"
+        android:elevation="2dp"
         android:scaleX="12"
         android:scaleY="12"
         android:visibility="invisible"
@@ -52,20 +53,52 @@
         app:layout_constraintTop_toTopOf="@id/elipse"
         app:layout_constraintVertical_bias="0.1" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="208dp"
-        android:elevation="-2dp"
-        android:text="POGODA - 40 STOPNIE"
-        android:textColor="#FFEB3B"
-        android:textSize="24sp"
-        android:textStyle="bold"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvWeather"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="316dp"
+        android:elevation="-1dp"
+        app:cardBackgroundColor="@color/transparentWeather"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="-1dp"
+        app:cardMaxElevation="-1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="28dp"
+                android:text="TextView"
+                android:textColor="#F1F0F0"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="TextView"
+                android:textColor="#EFEDDD"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.123"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
