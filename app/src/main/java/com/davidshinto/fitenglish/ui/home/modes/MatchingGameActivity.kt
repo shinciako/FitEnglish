@@ -3,13 +3,17 @@ package com.davidshinto.fitenglish.ui.home.modes
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.davidshinto.fitenglish.Game
 import com.davidshinto.fitenglish.R
 import com.davidshinto.fitenglish.utils.Flashcard
 import com.davidshinto.fitenglish.utils.Word
 import com.davidshinto.fitenglish.utils.WordList
 import com.google.firebase.database.FirebaseDatabase
+import java.util.Random
+import kotlin.properties.Delegates
 
 class MatchingGameActivity : AppCompatActivity() {
 
@@ -17,12 +21,30 @@ class MatchingGameActivity : AppCompatActivity() {
     private lateinit var polishWordsAdapter: PolishWordsAdapter
     private var selectedEnglishWord: String = ""
     private var selectedPolishWord: String = ""
+    private lateinit var inputGame: Game
+    private var randomNumber by Delegates.notNull<Int>()
+    private var currentQuestion = 0
+    private var numberOfQuestions by Delegates.notNull<Int>()
+    val categoryWordList = mutableListOf<Word>()
+    private val navigationArgs: MatchingGameActivityArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_matching_game)
-        val polishWords = WordList.wordList.map { it.polName }.toMutableList()
-        val englishWords = WordList.wordList.map { it.engName }.toMutableList()
+
+        inputGame = navigationArgs.game
+        WordList.wordList.forEach {word ->
+            if(word.category == inputGame.category) categoryWordList.add(word)
+        }
+        numberOfQuestions = inputGame.questionsPerTest
+
+        while(categoryWordList.size != numberOfQuestions) {
+            randomizeNumber()
+            categoryWordList.removeAt(randomNumber)
+        }
+
+        val polishWords = categoryWordList.map { it.polName }.toMutableList()
+        val englishWords = categoryWordList.map { it.engName }.toMutableList()
 
         polishWords.shuffle()
         englishWords.shuffle()
@@ -60,5 +82,9 @@ class MatchingGameActivity : AppCompatActivity() {
             englishWordsAdapter.resetSelection()
             polishWordsAdapter.resetSelection()
         }
+    }
+
+    private fun randomizeNumber() {
+        randomNumber = Random().nextInt(categoryWordList.size - 1)
     }
 }

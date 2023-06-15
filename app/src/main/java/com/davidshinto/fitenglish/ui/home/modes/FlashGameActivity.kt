@@ -30,6 +30,7 @@ class FlashGameActivity : AppCompatActivity() {
     private val navigationArgs: FlashGameActivityArgs by navArgs()
     private var currentDistance = 0
     private lateinit var gameConfHelper: GameHelper
+    val categoryWordList = mutableListOf<Word>()
 
     private val startGPSTrackerActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -51,8 +52,12 @@ class FlashGameActivity : AppCompatActivity() {
         gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
 
 
-        binding.tvCategoryName.text = inputGame.category.name
+        binding.tvCategoryName.text = inputGame.category
         setupButtons()
+
+        WordList.wordList.forEach {word ->
+            if(word.category == inputGame.category) categoryWordList.add(word)
+        }
     }
 
     private fun setupButtons() {
@@ -70,7 +75,7 @@ class FlashGameActivity : AppCompatActivity() {
         randomizeNumber()
         currentPosition++
         if (currentPosition < numberOfQuestions) {
-            binding.tvFlash.text = WordList.wordList[randomNumber].engName
+            binding.tvFlash.text = categoryWordList[randomNumber].engName
             binding.pbQuestions.progress += ((1.0 / numberOfQuestions) * 100).toInt()
         } else if (currentDistance < inputGame.distance) {
             val intent = Intent(this, GPSTracker::class.java)
@@ -84,7 +89,7 @@ class FlashGameActivity : AppCompatActivity() {
     }
 
     private fun randomizeNumber() {
-        randomNumber = Random().nextInt(WordList.wordList.size - 1)
+        randomNumber = Random().nextInt(categoryWordList.size - 1)
     }
 
     override fun onStart() {
@@ -94,7 +99,7 @@ class FlashGameActivity : AppCompatActivity() {
 
     private fun setupRandomFlashcards() {
         randomizeNumber()
-        binding.tvFlash.text = WordList.wordList[randomNumber].engName
+        binding.tvFlash.text = categoryWordList[randomNumber].engName
     }
 }
 

@@ -1,15 +1,13 @@
 package com.davidshinto.fitenglish
 
 import android.os.Parcelable
-import com.davidshinto.fitenglish.utils.Category
 import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 
 @Parcelize
 data class Game(
     val id: Int,
     val mode: Mode,
-    val category: @RawValue Category,
+    val category: String,
     val distance: Int,
     val distanceAfterTest: Int,
     val questionsPerTest: Int

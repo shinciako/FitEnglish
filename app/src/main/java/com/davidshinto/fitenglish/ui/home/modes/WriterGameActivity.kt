@@ -7,6 +7,7 @@ import androidx.navigation.navArgs
 import com.davidshinto.fitenglish.Game
 import com.davidshinto.fitenglish.databinding.ActivityWriterGameBinding
 import com.davidshinto.fitenglish.utils.Card
+import com.davidshinto.fitenglish.utils.Word
 import com.davidshinto.fitenglish.utils.WordList
 import java.util.*
 import kotlin.properties.Delegates
@@ -19,6 +20,7 @@ class WriterGameActivity : AppCompatActivity() {
     private var currentQuestion = 0
     private var numberOfQuestions by Delegates.notNull<Int>()
     private val navigationArgs: WriterGameActivityArgs by navArgs()
+    val categoryWordList = mutableListOf<Word>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,20 +28,24 @@ class WriterGameActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         inputGame = navigationArgs.game
+        WordList.wordList.forEach {word ->
+            if(word.category == inputGame.category) categoryWordList.add(word)
+        }
+
         numberOfQuestions = inputGame.questionsPerTest
-        binding.tvCategoryName.text = inputGame.category.name
+        binding.tvCategoryName.text = inputGame.category
         setupQuestion()
         setupButton()
     }
 
     private fun setupQuestion(){
         randomizeNumber()
-        binding.tvWriter.text = WordList.wordList[randomNumber].engName
+        binding.tvWriter.text = categoryWordList[randomNumber].engName
     }
 
     private fun setupButton() {
         binding.btnSubmitWriter.setOnClickListener {
-            if(binding.etAnswer.text.toString() == WordList.wordList[randomNumber].polName){
+            if(binding.etAnswer.text.toString() == categoryWordList[randomNumber].polName){
                 points++
                 currentQuestion++
                 setupQuestion()
@@ -52,6 +58,6 @@ class WriterGameActivity : AppCompatActivity() {
     }
 
     private fun randomizeNumber() {
-        randomNumber = Random().nextInt(WordList.wordList.size - 1)
+        randomNumber = Random().nextInt(categoryWordList.size - 1)
     }
 }
