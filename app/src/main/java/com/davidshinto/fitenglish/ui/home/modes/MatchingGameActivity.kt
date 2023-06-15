@@ -47,20 +47,15 @@ class MatchingGameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_matching_game)
-
         inputGame = navigationArgs.game
         WordList.wordList.forEach {word ->
             if(word.category == inputGame.category) categoryWordList.add(word)
         }
-        numberOfQuestions = inputGame.questionsPerTest
 
         while(categoryWordList.size != numberOfQuestions) {
             randomizeNumber()
             categoryWordList.removeAt(randomNumber)
         }
-
-//        val polishWords = categoryWordList.map { it.polName }.toMutableList()
-//        val englishWords = categoryWordList.map { it.engName }.toMutableList()
         gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
     }
 
@@ -132,6 +127,6 @@ class MatchingGameActivity : AppCompatActivity() {
     }
 
     private fun randomizeNumber() {
-        randomNumber = Random().nextInt(categoryWordList.size - 1)
+        randomNumber = Random().nextInt(categoryWordList.size)
     }
 }

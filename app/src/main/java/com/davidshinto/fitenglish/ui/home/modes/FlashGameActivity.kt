@@ -7,12 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.davidshinto.fitenglish.databinding.ActivityFlashGameBinding
 import com.davidshinto.fitenglish.db.Session
-import com.davidshinto.fitenglish.utils.Word
-import com.davidshinto.fitenglish.utils.WordList
-import com.davidshinto.fitenglish.utils.parcelable
-import java.time.OffsetDateTime
-import java.util.Random
 import com.davidshinto.fitenglish.utils.*
+import java.time.OffsetDateTime
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.properties.Delegates
@@ -32,11 +28,6 @@ class FlashGameActivity : AppCompatActivity() {
     private val categoryWordList = mutableListOf<Word>()
 
 
-    private lateinit var wordList: List<Word>
-    private lateinit var englishWords: MutableList<String>
-
-
-
     private val startGPSTrackerActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -52,13 +43,13 @@ class FlashGameActivity : AppCompatActivity() {
         binding = ActivityFlashGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
         inputGame = navigationArgs.game
+        WordList.wordList.forEach {word ->
+            if(word.category == inputGame.category) categoryWordList.add(word)
+        }
         gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
         binding.tvCategoryName.text = inputGame.category
         setupButtons()
 
-        WordList.wordList.forEach {word ->
-            if(word.category == inputGame.category) categoryWordList.add(word)
-        }
     }
 
     private fun setupButtons() {
@@ -72,19 +63,14 @@ class FlashGameActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        super.onStart()
-        englishWords = wordList.map { it.engName }.toMutableList()
         setupRandomFlashcards()
+        super.onStart()
     }
 
     private fun goToNextQuestion() {
         randomizeNumber()
         currentPosition++
         numberOfQuestions++
-        if (currentPosition < numberOfQuestions) {
-            binding.tvFlash.text = categoryWordList[randomNumber].engName
-            binding.pbQuestions.progress += ((1.0 / numberOfQuestions) * 100).toInt()
-        }
         if (currentPosition < inputGame.questionsPerTest) {
             getQuestionAndUpdateProgressBar()
         } else if (currentDistance < inputGame.distance) {
@@ -99,8 +85,8 @@ class FlashGameActivity : AppCompatActivity() {
     }
 
     private fun getQuestionAndUpdateProgressBar(){
-        binding.tvFlash.text = englishWords[randomNumber]
-        binding.pbQuestions.progress += ((1.0 / inputGame.questionsPerTest) * 100).toInt()
+        binding.tvFlash.text = categoryWordList[randomNumber].engName
+        binding.pbQuestions.progress = ((currentPosition.toDouble() / inputGame.questionsPerTest) * 100.0).toInt()
     }
 
     private fun trackDistance(){

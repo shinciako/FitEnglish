@@ -18,7 +18,7 @@ class FinishScreenActivity(context: Context, private val session: Session) :
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         setContentView(binding.root)
         setCanceledOnTouchOutside(false)
-        binding.tvFinishScreenCategory.text = "Category - " + session.game.category.name
+        binding.tvFinishScreenCategory.text = "Category - " + session.game.category
         binding.tvFinishScreenMode.text = "Mode - " + session.game.mode.name
         binding.tvFinishScreenAccuracy.text =
             "Accuracy - " + session.accuracy.toInt().toString() + "%"

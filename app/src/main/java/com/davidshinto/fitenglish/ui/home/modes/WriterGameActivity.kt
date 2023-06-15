@@ -1,17 +1,11 @@
 package com.davidshinto.fitenglish.ui.home.modes
 
-import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.davidshinto.fitenglish.databinding.ActivityWriterGameBinding
-import com.davidshinto.fitenglish.utils.Word
-import com.davidshinto.fitenglish.utils.WordList
-import java.util.Random
 import com.davidshinto.fitenglish.db.Session
 import com.davidshinto.fitenglish.utils.*
 import java.time.OffsetDateTime
@@ -54,7 +48,7 @@ class WriterGameActivity : AppCompatActivity() {
         WordList.wordList.forEach {word ->
             if(word.category == inputGame.category) categoryWordList.add(word)
         }
-        numberOfQuestions = inputGame.questionsPerTest
+
         binding.tvCategoryName.text = inputGame.category
         setupQuestion()
         gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
