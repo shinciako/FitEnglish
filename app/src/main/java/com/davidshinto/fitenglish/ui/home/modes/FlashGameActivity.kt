@@ -99,7 +99,16 @@ class FlashGameActivity : AppCompatActivity() {
         binding.pbQuestions.progress = 100
         val accuracy = (points.toFloat() / numberOfQuestions.toFloat())*100.0
         accuracy.roundToInt()
-        val session = Session(0, inputGame, accuracy, numberOfQuestions, OffsetDateTime.now())
+        val session = Session(
+            id = 0,
+            accuracy = accuracy,
+            numberOfQuestions = numberOfQuestions,
+            date = OffsetDateTime.now(),
+            mode = inputGame.mode,
+            category = inputGame.category,
+            distance = inputGame.distance,
+        )
+
         val popupActivity = FinishScreenActivity(this, session)
         popupActivity.show()
     }
