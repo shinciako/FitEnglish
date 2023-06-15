@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity(), WidthProvider {
         return displayMetrics.widthPixels
     }
 
-    private fun loadDataFromDB()
+    fun loadDataFromDB()
     {
         val database =
             FirebaseDatabase.getInstance("https://fitenglishdb-default-rtdb.europe-west1.firebasedatabase.app/")
