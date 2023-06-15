@@ -4,10 +4,6 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -18,35 +14,32 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.davidshinto.fitenglish.R
 import com.davidshinto.fitenglish.utils.GameHelper
-import com.davidshinto.fitenglish.utils.parcelable
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 
-class GPSTracker : AppCompatActivity(), SensorEventListener {
+
+//later need to refactor it to the service so it will work in background
+class GPSTracker : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var sensorManager: SensorManager
-    private lateinit var accelerometer: Sensor
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
     private var distance = 0.0
     private var previousLocation: Location? = null
-    private var lastAccelerometerData: FloatArray? = null
-    private var lastAccelerometerTimestamp: Long = 0
     private lateinit var gameHelper: GameHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gpstracker)
-        gameHelper = intent.parcelable("GAME_HELPER")!!
+
+//        newer one but doesn't work for my OREO :(
+//        gameHelper = intent.parcelable("GAME_HELPER")!!
+
+        gameHelper = intent.getParcelableExtra("GAME_HELPER")!!
+
         if (gameHelper.nowDistance + gameHelper.breakDistance > gameHelper.totalDistance) {
             gameHelper.breakDistance = gameHelper.totalDistance - gameHelper.nowDistance
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
 
         locationRequest = LocationRequest.create().apply {
             interval = 5000
@@ -69,6 +62,7 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
                     previousLocation = location
                 }
                 if (distance >= gameHelper.breakDistance) {
+
                     val intent = Intent()
                     intent.putExtra("GAME_HELPER", gameHelper)
                     setResult(Activity.RESULT_OK, intent)
@@ -102,14 +96,11 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
                 arrayOf(ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION
             )
         }
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
     }
 
     override fun onPause() {
         super.onPause()
-
         fusedLocationClient.removeLocationUpdates(locationCallback)
-        sensorManager.unregisterListener(this)
     }
 
     override fun onRequestPermissionsResult(
@@ -122,15 +113,6 @@ class GPSTracker : AppCompatActivity(), SensorEventListener {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startLocationUpdates()
             }
-        }
-    }
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
-
-    override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
-            lastAccelerometerData = event.values.clone()
-            lastAccelerometerTimestamp = event.timestamp
         }
     }
 

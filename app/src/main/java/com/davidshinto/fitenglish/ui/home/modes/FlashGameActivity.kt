@@ -1,7 +1,14 @@
 package com.davidshinto.fitenglish.ui.home.modes
 
+import android.content.Context
 import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
@@ -14,7 +21,7 @@ import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
 
-class FlashGameActivity : AppCompatActivity() {
+class FlashGameActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var binding: ActivityFlashGameBinding
     private var currentPosition = 0
@@ -26,6 +33,19 @@ class FlashGameActivity : AppCompatActivity() {
     private var currentDistance = 0
     private lateinit var gameConfHelper: GameHelper
     private val categoryWordList = mutableListOf<Word>()
+
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
+    private var currentTiltDirection: TiltDirection? = null
+    private var isCooldownActive = false
+    private val cooldownDurationMillis: Long = 2000
+
+
+
+    private enum class TiltDirection {
+        LEFT,
+        RIGHT
+    }
 
 
     private val startGPSTrackerActivity =
@@ -49,7 +69,8 @@ class FlashGameActivity : AppCompatActivity() {
         gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
         binding.tvCategoryName.text = inputGame.category
         setupButtons()
-
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     }
 
     private fun setupButtons() {
@@ -63,8 +84,11 @@ class FlashGameActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        setupRandomFlashcards()
         super.onStart()
+        setupRandomFlashcards()
+        accelerometer?.let {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
     }
 
     private fun goToNextQuestion() {
@@ -117,5 +141,60 @@ class FlashGameActivity : AppCompatActivity() {
     private fun setupRandomFlashcards() {
         randomizeNumber()
         binding.tvFlash.text = categoryWordList[randomNumber].engName
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        event?.let {
+            if (it.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                val x = it.values[0]
+                val tiltThreshold = 1.5f
+
+                if (x > tiltThreshold && currentTiltDirection != TiltDirection.RIGHT) {
+                    currentTiltDirection = TiltDirection.RIGHT
+                    handleTiltRight()
+                } else if (x < -tiltThreshold && currentTiltDirection != TiltDirection.LEFT) {
+                    currentTiltDirection = TiltDirection.LEFT
+                    handleTiltLeft()
+                }
+            }
+        }
+    }
+
+    private fun handleTiltRight() {
+        if (!isCooldownActive) {
+            points++
+            goToNextQuestion()
+            startCooldown()
+        }
+    }
+
+    private fun handleTiltLeft() {
+        if (!isCooldownActive) {
+            goToNextQuestion()
+            startCooldown()
+        }
+    }
+
+    private fun startCooldown() {
+        isCooldownActive = true
+        Handler(Looper.getMainLooper()).postDelayed({
+            isCooldownActive = false
+        }, cooldownDurationMillis)
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        //no impl needed
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        accelerometer?.let {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
     }
 }
