@@ -25,11 +25,7 @@ class FlashGameActivity : AppCompatActivity() {
     private val navigationArgs: FlashGameActivityArgs by navArgs()
     private var currentDistance = 0
     private lateinit var gameConfHelper: GameHelper
-
-
-    private lateinit var wordList: List<Word>
-    private lateinit var englishWords: MutableList<String>
-
+    private val categoryWordList = mutableListOf<Word>()
 
 
     private val startGPSTrackerActivity =
@@ -46,13 +42,14 @@ class FlashGameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFlashGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         inputGame = navigationArgs.game
+        WordList.wordList.forEach {word ->
+            if(word.category == inputGame.category) categoryWordList.add(word)
+        }
         gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
-
-        wordList = WordList.wordList
-        binding.tvCategoryName.text = inputGame.category.name
+        binding.tvCategoryName.text = inputGame.category
         setupButtons()
+
     }
 
     private fun setupButtons() {
@@ -66,9 +63,8 @@ class FlashGameActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        super.onStart()
-        englishWords = wordList.map { it.engName }.toMutableList()
         setupRandomFlashcards()
+        super.onStart()
     }
 
     private fun goToNextQuestion() {
@@ -85,12 +81,12 @@ class FlashGameActivity : AppCompatActivity() {
     }
 
     private fun randomizeNumber() {
-        randomNumber = Random().nextInt(wordList.size)
+        randomNumber = Random().nextInt(categoryWordList.size - 1)
     }
 
     private fun getQuestionAndUpdateProgressBar(){
-        binding.tvFlash.text = englishWords[randomNumber]
-        binding.pbQuestions.progress += ((1.0 / inputGame.questionsPerTest) * 100).toInt()
+        binding.tvFlash.text = categoryWordList[randomNumber].engName
+        binding.pbQuestions.progress = ((currentPosition.toDouble() / inputGame.questionsPerTest) * 100.0).toInt()
     }
 
     private fun trackDistance(){
@@ -111,6 +107,6 @@ class FlashGameActivity : AppCompatActivity() {
 
     private fun setupRandomFlashcards() {
         randomizeNumber()
-        binding.tvFlash.text = englishWords[randomNumber]
+        binding.tvFlash.text = categoryWordList[randomNumber].engName
     }
 }

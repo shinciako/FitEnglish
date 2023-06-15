@@ -1,15 +1,11 @@
 package com.davidshinto.fitenglish.ui.finder
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.davidshinto.fitenglish.R
@@ -17,11 +13,6 @@ import com.davidshinto.fitenglish.databinding.FragmentDashboardBinding
 import com.davidshinto.fitenglish.utils.Word
 import com.davidshinto.fitenglish.utils.WordAdapter
 import com.davidshinto.fitenglish.utils.WordList
-import com.google.firebase.FirebaseApp
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import java.util.Locale
 
 class FinderFragment : Fragment() {

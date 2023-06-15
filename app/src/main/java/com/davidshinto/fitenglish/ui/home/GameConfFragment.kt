@@ -9,9 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.davidshinto.fitenglish.*
+import com.davidshinto.fitenglish.utils.Game
+import com.davidshinto.fitenglish.utils.Mode
 import com.davidshinto.fitenglish.databinding.FragmentGameConfBinding
-import com.davidshinto.fitenglish.utils.*
+import com.davidshinto.fitenglish.utils.CategoryList
+import com.davidshinto.fitenglish.utils.CategorySpinnerAdapter
+import com.davidshinto.fitenglish.utils.CenterZoomLayoutManager
+import com.davidshinto.fitenglish.utils.SnapHelperOneByOne
+import com.davidshinto.fitenglish.utils.WidthProvider
 import kotlin.math.abs
 import kotlin.properties.Delegates
 
@@ -24,16 +29,10 @@ class GameConfFragment : Fragment() {
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private var width by Delegates.notNull<Int>()
     private var widthProvider: WidthProvider? = null
-    private lateinit var selectedCategory: Category
+    private lateinit var selectedCategory: String
 
     private lateinit var layoutManager: CenterZoomLayoutManager
     private val snapHelper = SnapHelperOneByOne()
-
-    private val dummyCategory = arrayOf(
-        Category(0, "Food"),
-        Category(1, "Drink"),
-        Category(2, "IT terms")
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -41,7 +40,7 @@ class GameConfFragment : Fragment() {
         _binding = FragmentGameConfBinding.inflate(inflater, container, false)
         getDeviceWidth()
         setupRv()
-        setupSpinner(dummyCategory)
+        setupSpinner(CategoryList.categoryList)
         setupSliders()
         setupSubmitBtn()
         return binding.root
@@ -135,16 +134,16 @@ class GameConfFragment : Fragment() {
     }
 
 
-    private fun setupSpinner(categories: Array<Category>) {
+    private fun setupSpinner(categories: List<String>) {
         val spinner = binding.spnCategory
         val arrayAdapter =
-            CategorySpinnerAdapter(requireContext(), categories, spinner) { category: Category ->
+            CategorySpinnerAdapter(requireContext(), categories, spinner) { category: String ->
                 categorySelected(category)
             }
         spinner.adapter = arrayAdapter
     }
 
-    private fun categorySelected(category: Category) {
+    private fun categorySelected(category: String) {
         selectedCategory = category
     }
 

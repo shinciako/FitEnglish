@@ -9,6 +9,10 @@ import androidx.navigation.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.davidshinto.fitenglish.R
+import com.davidshinto.fitenglish.utils.Word
+import com.davidshinto.fitenglish.utils.WordList
+import java.util.Random
+import kotlin.properties.Delegates
 import com.davidshinto.fitenglish.db.Session
 import com.davidshinto.fitenglish.utils.*
 import java.time.OffsetDateTime
@@ -20,6 +24,9 @@ class MatchingGameActivity : AppCompatActivity() {
     private lateinit var polishWordsAdapter: PolishWordsAdapter
     private var selectedEnglishWord: String = ""
     private var selectedPolishWord: String = ""
+    private var randomNumber by Delegates.notNull<Int>()
+    private var currentQuestion = 0
+    val categoryWordList = mutableListOf<Word>()
 
     private var numberOfQuestions = 0
     private var negativePoints = 0
@@ -40,8 +47,15 @@ class MatchingGameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_matching_game)
-
         inputGame = navigationArgs.game
+        WordList.wordList.forEach {word ->
+            if(word.category == inputGame.category) categoryWordList.add(word)
+        }
+
+        while(categoryWordList.size != numberOfQuestions) {
+            randomizeNumber()
+            categoryWordList.removeAt(randomNumber)
+        }
         gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
     }
 
@@ -50,7 +64,6 @@ class MatchingGameActivity : AppCompatActivity() {
         val wordList = WordList.wordList.shuffled().take(inputGame.questionsPerTest)
         val polishWords = wordList.map { it.polName }.toMutableList()
         val englishWords = wordList.map { it.engName }.toMutableList()
-
 
         polishWords.shuffle()
         englishWords.shuffle()
@@ -111,5 +124,9 @@ class MatchingGameActivity : AppCompatActivity() {
         val session = Session(0, inputGame, accuracy, numberOfQuestions, OffsetDateTime.now())
         val popupActivity = FinishScreenActivity(this, session)
         popupActivity.show()
+    }
+
+    private fun randomizeNumber() {
+        randomNumber = Random().nextInt(categoryWordList.size)
     }
 }

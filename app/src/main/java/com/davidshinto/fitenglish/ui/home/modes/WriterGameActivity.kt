@@ -1,9 +1,9 @@
 package com.davidshinto.fitenglish.ui.home.modes
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.davidshinto.fitenglish.databinding.ActivityWriterGameBinding
 import com.davidshinto.fitenglish.db.Session
@@ -19,6 +19,7 @@ class WriterGameActivity : AppCompatActivity() {
     private var points = 0
     private var randomNumber by Delegates.notNull<Int>()
     private val navigationArgs: WriterGameActivityArgs by navArgs()
+    val categoryWordList = mutableListOf<Word>()
     private var currentPosition = 0
 
     private var numberOfQuestions = 0
@@ -39,16 +40,18 @@ class WriterGameActivity : AppCompatActivity() {
             }
         }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWriterGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         inputGame = navigationArgs.game
-        gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
+        WordList.wordList.forEach {word ->
+            if(word.category == inputGame.category) categoryWordList.add(word)
+        }
 
-        binding.tvCategoryName.text = inputGame.category.name
+        binding.tvCategoryName.text = inputGame.category
+        setupQuestion()
+        gameConfHelper = GameHelper(inputGame.distanceAfterTest, inputGame.distance)
         wordList = WordList.wordList
         setupButton()
     }
@@ -62,13 +65,13 @@ class WriterGameActivity : AppCompatActivity() {
 
     private fun setupQuestion() {
         randomizeNumber()
-        binding.tvWriter.text = englishWords[randomNumber]
+        binding.tvWriter.text = categoryWordList[randomNumber].engName
         binding.etAnswer.setText("")
     }
 
     private fun setupButton() {
         binding.btnSubmitWriter.setOnClickListener {
-            if (binding.etAnswer.text.toString() == polishWords[randomNumber]) {
+            if(binding.etAnswer.text.toString() == categoryWordList[randomNumber].polName){
                 points++
             }
             currentPosition++
@@ -103,6 +106,6 @@ class WriterGameActivity : AppCompatActivity() {
     }
 
     private fun randomizeNumber() {
-        randomNumber = Random().nextInt(wordList.size)
+        randomNumber = Random().nextInt(categoryWordList.size - 1)
     }
 }

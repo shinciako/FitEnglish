@@ -19,7 +19,11 @@ import androidx.core.content.ContextCompat
 import com.davidshinto.fitenglish.R
 import com.davidshinto.fitenglish.utils.GameHelper
 import com.davidshinto.fitenglish.utils.parcelable
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 
 class GPSTracker : AppCompatActivity(), SensorEventListener {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
