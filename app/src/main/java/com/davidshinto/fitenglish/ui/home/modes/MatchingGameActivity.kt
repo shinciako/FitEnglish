@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.davidshinto.fitenglish.Game
 import com.davidshinto.fitenglish.R
-import com.davidshinto.fitenglish.utils.Flashcard
 import com.davidshinto.fitenglish.utils.Word
 import com.davidshinto.fitenglish.utils.WordList
-import com.google.firebase.database.FirebaseDatabase
 import java.util.Random
 import kotlin.properties.Delegates
 

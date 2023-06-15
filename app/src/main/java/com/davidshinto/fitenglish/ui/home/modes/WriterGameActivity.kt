@@ -1,15 +1,14 @@
 package com.davidshinto.fitenglish.ui.home.modes
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.davidshinto.fitenglish.Game
 import com.davidshinto.fitenglish.databinding.ActivityWriterGameBinding
-import com.davidshinto.fitenglish.utils.Card
 import com.davidshinto.fitenglish.utils.Word
 import com.davidshinto.fitenglish.utils.WordList
-import java.util.*
+import java.util.Random
 import kotlin.properties.Delegates
 
 class WriterGameActivity : AppCompatActivity() {

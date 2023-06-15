@@ -14,7 +14,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.davidshinto.fitenglish.databinding.ActivityMainBinding
-import com.davidshinto.fitenglish.utils.Category
 import com.davidshinto.fitenglish.utils.CategoryList
 import com.davidshinto.fitenglish.utils.WidthProvider
 import com.davidshinto.fitenglish.utils.Word
@@ -26,8 +25,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.getValue
-import java.io.File
 
 
 class MainActivity : AppCompatActivity(), WidthProvider {
@@ -42,7 +39,6 @@ class MainActivity : AppCompatActivity(), WidthProvider {
         setupNav()
         FirebaseApp.initializeApp(this)
 
-        //SaveDataToDBFromFile("text.txt")
         loadDataFromDB()
     }
 

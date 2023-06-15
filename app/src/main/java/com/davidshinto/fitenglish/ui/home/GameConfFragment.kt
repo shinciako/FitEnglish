@@ -9,9 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.davidshinto.fitenglish.*
+import com.davidshinto.fitenglish.Game
+import com.davidshinto.fitenglish.Mode
 import com.davidshinto.fitenglish.databinding.FragmentGameConfBinding
-import com.davidshinto.fitenglish.utils.*
+import com.davidshinto.fitenglish.utils.CategoryList
+import com.davidshinto.fitenglish.utils.CategorySpinnerAdapter
+import com.davidshinto.fitenglish.utils.CenterZoomLayoutManager
+import com.davidshinto.fitenglish.utils.SnapHelperOneByOne
+import com.davidshinto.fitenglish.utils.WidthProvider
 import kotlin.math.abs
 import kotlin.properties.Delegates
 

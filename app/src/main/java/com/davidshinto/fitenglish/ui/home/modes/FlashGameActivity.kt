@@ -9,13 +9,12 @@ import androidx.navigation.navArgs
 import com.davidshinto.fitenglish.databinding.ActivityFlashGameBinding
 import com.davidshinto.fitenglish.db.Session
 import com.davidshinto.fitenglish.ui.home.modes.GPSTracker
-import com.davidshinto.fitenglish.utils.Card
 import com.davidshinto.fitenglish.utils.Word
 import com.davidshinto.fitenglish.utils.WordList
 import com.davidshinto.fitenglish.utils.parcelable
 import kotlinx.parcelize.Parcelize
 import java.time.OffsetDateTime
-import java.util.*
+import java.util.Random
 import kotlin.properties.Delegates
 
 
