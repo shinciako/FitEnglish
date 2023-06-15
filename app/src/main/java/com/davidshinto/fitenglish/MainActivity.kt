@@ -1,11 +1,16 @@
 package com.davidshinto.fitenglish
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.WindowMetrics
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.forEach
 import androidx.navigation.NavController
@@ -18,6 +23,8 @@ import com.davidshinto.fitenglish.utils.CategoryList
 import com.davidshinto.fitenglish.utils.WidthProvider
 import com.davidshinto.fitenglish.utils.Word
 import com.davidshinto.fitenglish.utils.WordList
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.FirebaseApp
@@ -25,12 +32,15 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.tasks.await
 
 
 class MainActivity : AppCompatActivity(), WidthProvider {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +105,8 @@ class MainActivity : AppCompatActivity(), WidthProvider {
 
     private fun loadDataFromDB()
     {
-        val database = FirebaseDatabase.getInstance("https://fitenglishdb-default-rtdb.europe-west1.firebasedatabase.app/")
+        val database =
+            FirebaseDatabase.getInstance("https://fitenglishdb-default-rtdb.europe-west1.firebasedatabase.app/")
         val dbRefCategory = database.getReference("wordList/")
 
         dbRefCategory.addValueEventListener(object : ValueEventListener {
@@ -132,13 +143,18 @@ class MainActivity : AppCompatActivity(), WidthProvider {
             override fun onCancelled(databaseError: DatabaseError) {
                 Toast.makeText(applicationContext,"$databaseError",
                     Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "An error happened while getting database data: $databaseError",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
 
     private fun SaveDataToDBFromFile(filePath : String) {
-        var categoryName : String = ""
-        var wordList : String = "Numbers:\n" +
+        var categoryName: String = ""
+        var wordList: String = "Numbers:\n" +
                 "jeden-one\n" +
                 "dwa-two\n" +
                 "trzy-three\n" +
@@ -412,15 +428,67 @@ class MainActivity : AppCompatActivity(), WidthProvider {
                 "jeść-to eat\n" +
                 "pić-to drink\n" +
                 "spać-to sleep"
-        val database = FirebaseDatabase.getInstance("https://fitenglishdb-default-rtdb.europe-west1.firebasedatabase.app/")
+        val database =
+            FirebaseDatabase.getInstance("https://fitenglishdb-default-rtdb.europe-west1.firebasedatabase.app/")
 
         wordList.split("\n").forEach {
-            if(it.contains(":")) categoryName = it.replace(":", "")
+            if (it.contains(":")) categoryName = it.replace(":", "")
             else {
                 val word = it.split("-")
                 val dbRef = database.getReference("wordList/${categoryName}/${word[1]}")
                 if (!word[0].isEmpty()) dbRef.setValue(Word(word[1], word[0], categoryName))
             }
         }
+    }
+
+    suspend fun getLocationFromApi(): Location? {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        if (isLocationPermissionGranted()) {
+            return getLastKnownLocation()
+        } else {
+            requestLocationPermission()
+        }
+        return null
+    }
+
+    private fun isLocationPermissionGranted(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            1
+        )
+    }
+
+    private suspend fun getLastKnownLocation(): Location? {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return null
+        }
+
+        try {
+            return fusedLocationClient.lastLocation.await()
+        } catch (exception: Exception) {
+            Log.e("GG", "Error getting last known location: ${exception.message}")
+        }
+        return null
     }
 }

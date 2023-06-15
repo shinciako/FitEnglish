@@ -8,5 +8,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="card_background">#3446cf</color>
-
+    <color name="transparentWeather">#400A24CD</color>
 </resources>

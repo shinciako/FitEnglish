@@ -1,4 +1,4 @@
-package com.davidshinto.fitenglish
+package com.davidshinto.fitenglish.utils
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
