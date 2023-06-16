@@ -55,6 +55,9 @@ class HomeFragment : Fragment() {
     private val BASE_URL = "https://api.openweathermap.org/data/2.5/"
     private val celsiusIcon = "\u2103"
 
+    private val DEFAULT_LATITUDE = 37.7749 // Default latitude (e.g., San Francisco)
+    private val DEFAULT_LONGITUDE = -122.4194 // Default longitude
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
@@ -204,9 +207,12 @@ class HomeFragment : Fragment() {
 
         openWeatherMapService = retrofit.create(OpenWeatherMapService::class.java)
 
+        val latitude = location?.latitude ?: DEFAULT_LATITUDE
+        val longitude = location?.longitude ?: DEFAULT_LONGITUDE
+
         response = openWeatherMapService.getWeather(
-            location!!.latitude,
-            location!!.longitude,
+            latitude,
+            longitude,
             apiKey
         ).body()
 
@@ -214,6 +220,7 @@ class HomeFragment : Fragment() {
             response?.let { setDataInCvWeather(it) }
         }
         homeViewModel.response = response
+
     }
 
 
