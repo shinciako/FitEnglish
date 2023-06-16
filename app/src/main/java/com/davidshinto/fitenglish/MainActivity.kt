@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), WidthProvider {
             setOf(
                 R.id.navigation_home,
                 R.id.navigation_finder,
-                R.id.navigation_cards,
+//                R.id.navigation_cards,
                 R.id.navigation_history
             )
         )
@@ -88,6 +88,11 @@ class MainActivity : AppCompatActivity(), WidthProvider {
         return findNavController(R.id.nav_host_fragment_activity_main).navigateUp()
     }
 
+    /**
+     * Returns the screen width in pixels
+     * @return <int> screen width
+     */
+
     override fun getWidth(): Int {
         val displayMetrics = DisplayMetrics()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -102,6 +107,11 @@ class MainActivity : AppCompatActivity(), WidthProvider {
         }
         return displayMetrics.widthPixels
     }
+
+
+    /**
+     * Loads data from Firebase database
+     */
 
     fun loadDataFromDB()
     {
@@ -152,7 +162,11 @@ class MainActivity : AppCompatActivity(), WidthProvider {
         })
     }
 
-    private fun SaveDataToDBFromFile(filePath : String) {
+    /**
+     * Loads data from file and saves it to database
+     */
+
+    fun SaveDataToDBFromFile(filePath : String) {
         var categoryName: String = ""
         var wordList: String = "Numbers:\n" +
                 "jeden-one\n" +
@@ -440,6 +454,12 @@ class MainActivity : AppCompatActivity(), WidthProvider {
             }
         }
     }
+
+    /**
+     * Gets current user location
+     *
+     * @return <Location> current user location
+     */
 
     suspend fun getLocationFromApi(): Location? {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)

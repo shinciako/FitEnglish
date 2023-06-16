@@ -52,6 +52,7 @@ class EnglishWordsAdapter(val words: MutableList<String>, val onItemClick: (Stri
         )
     }
 
+
     fun removeWord(word: String) {
         val position = words.indexOf(word)
         if (position != -1) {

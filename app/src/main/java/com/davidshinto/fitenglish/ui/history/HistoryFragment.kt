@@ -33,6 +33,9 @@ class HistoryFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Sets up game history database
+     */
     private suspend fun setupDb() {
         val dao = SessionDatabase.getInstance((activity as MainActivity).application).sessionDao()
         sessionList = dao.getAllSessions()

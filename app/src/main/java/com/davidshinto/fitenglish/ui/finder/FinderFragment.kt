@@ -54,6 +54,10 @@ class FinderFragment : Fragment() {
         _binding = null
     }
 
+    /**
+     * Filters data by the given query
+     * @param query Filter query
+     */
     private fun filterData(query: String?) {
         if (query.isNullOrBlank()) {
             updateUI(WordList.wordList)
@@ -71,6 +75,10 @@ class FinderFragment : Fragment() {
         }
     }
 
+    /**
+     * Updates word list with the words given in a parameter
+     * @param dataList List of words to be displayed
+     */
     private fun updateUI(dataList: List<Word>) {
         val recyclerView = root.findViewById<RecyclerView>(R.id.rv_wordList)
         recyclerView?.layoutManager = LinearLayoutManager(requireContext())
