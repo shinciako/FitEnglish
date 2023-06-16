@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -62,7 +63,8 @@ class GPSTracker : AppCompatActivity() {
                     previousLocation = location
                 }
                 if (distance >= gameHelper.breakDistance) {
-
+                    Toast.makeText(applicationContext,"Finished " + gameHelper.breakDistance + " metres",
+                        Toast.LENGTH_SHORT).show()
                     val intent = Intent()
                     intent.putExtra("GAME_HELPER", gameHelper)
                     setResult(Activity.RESULT_OK, intent)

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home_black_24dp"
@@ -10,10 +11,10 @@
         android:icon="@drawable/search_ic"
         android:title="@string/title_finder" />
 
-    <item
-        android:id="@+id/navigation_cards"
-        android:icon="@drawable/collection_ic"
-        android:title="@string/title_cards" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_cards"-->
+<!--        android:icon="@drawable/collection_ic"-->
+<!--        android:title="@string/title_cards" />-->
 
     <item
         android:id="@+id/navigation_history"

@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), WidthProvider {
             setOf(
                 R.id.navigation_home,
                 R.id.navigation_finder,
-                R.id.navigation_cards,
+//                R.id.navigation_cards,
                 R.id.navigation_history
             )
         )
