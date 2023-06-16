@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity(), WidthProvider {
      * Loads data from file and saves it to database
      */
 
-    private fun SaveDataToDBFromFile(filePath : String) {
+    fun SaveDataToDBFromFile(filePath : String) {
         var categoryName: String = ""
         var wordList: String = "Numbers:\n" +
                 "jeden-one\n" +
