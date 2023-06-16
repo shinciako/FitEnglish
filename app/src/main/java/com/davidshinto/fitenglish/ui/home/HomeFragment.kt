@@ -95,6 +95,9 @@ class HomeFragment : Fragment() {
         return root
     }
 
+    /**
+     * Creates a notification channel to allow sending notifications
+     */
     private fun createNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "My Channel"
@@ -108,6 +111,11 @@ class HomeFragment : Fragment() {
         }
     }
 
+    /**
+     * Builds and sends a notification with given information
+     * @param title Title of the notification
+     * @param message Message of the notification
+     */
     private fun showNotification(context: Context, title: String, message: String) {
         val intent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -145,6 +153,10 @@ class HomeFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets the text of word of the day
+     */
+
     fun setWordOfTheDay(word: String) {
         binding.tvWordOfTheDayText.text = word
     }
@@ -158,6 +170,9 @@ class HomeFragment : Fragment() {
         return animation
     }
 
+    /**
+     * Sets the weather on main screen
+     */
     private suspend fun setupWeather() {
         withContext(Dispatchers.Main) {
             val weatherData = homeViewModel.response
@@ -177,6 +192,9 @@ class HomeFragment : Fragment() {
         binding.cvWeather.visibility = View.VISIBLE
     }
 
+    /**
+     * Gets weather information from the RetroFit API
+     */
     private suspend fun getWeatherFromApi() {
         var location = (activity as MainActivity).getLocationFromApi()
         val retrofit = Retrofit.Builder()

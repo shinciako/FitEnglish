@@ -104,6 +104,9 @@ class FlashGameActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
+    /**
+     * Sets the random number from all variable words
+     */
     private fun randomizeNumber() {
         randomNumber = Random().nextInt(categoryWordList.size - 1)
     }
@@ -119,6 +122,9 @@ class FlashGameActivity : AppCompatActivity(), SensorEventListener {
         startGPSTrackerActivity.launch(intent)
     }
 
+    /**
+     * Finishes the game
+     */
     private fun finishGame(){
         binding.pbQuestions.progress = 100
         val accuracy = (points.toFloat() / numberOfQuestions.toFloat())*100.0

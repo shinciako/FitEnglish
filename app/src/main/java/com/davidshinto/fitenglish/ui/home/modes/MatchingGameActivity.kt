@@ -86,6 +86,11 @@ class MatchingGameActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Checks if user answer is correct
+     * If yes - removes the word
+     * If not - resets chosen words
+     */
     private fun checkAnswers() {
         if (selectedEnglishWord.isNotEmpty() && selectedPolishWord.isNotEmpty()) {
             val selectedEnglishWordTranslation = WordList.wordList.find { it.engName == selectedEnglishWord }?.polName
